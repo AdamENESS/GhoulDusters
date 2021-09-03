@@ -1,52 +1,27 @@
-# Prerequisites
-*.d
+.idea/
+**/.vscode/*
+ace\.code-workspace
 
-# Object files
-*.o
-*.ko
-*.obj
-*.elf
+build/
+game/
+build-/
+beebo/
+lib/
+bin/
 
-# Linker output
-*.ilk
-*.map
-*.exp
+# Showcase
+showcase/showcase
+showcase/*.bmp
+showcase/memory\.log
+showcase/game\.log
 
-# Precompiled Headers
-*.gch
-*.pch
+# Tools
+tools/*/*.exe
+tools/*/*.png
+tools/*/*.bm
+tools/*/*.plt
 
-# Libraries
-*.lib
-*.a
-*.la
-*.lo
+*.dasm
 
-# Shared objects (inc. Windows DLLs)
-*.dll
-*.so
-*.so.*
-*.dylib
-
-# Executables
-*.exe
-*.out
-*.app
-*.i*86
-*.x86_64
-*.hex
-
-# Debug files
-*.dSYM/
-*.su
-*.idb
-*.pdb
-
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+showcase/NUL
+exe2adf.exe
