@@ -61,7 +61,7 @@ static void menuGsCreate(void) {
 	s_cbFadeOut = titleFadeOut;
 	s_cbWait = titleWait;
 
-	logBlockEnd("menuGsCreate()");
+	logBlockEnd("menuGsCreate() - tah");
 	systemUnuse();
 	viewLoad(s_pView);
    
