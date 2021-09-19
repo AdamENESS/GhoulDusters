@@ -13,6 +13,6 @@ extern tStateManager *g_pStateMachineGame;
 
 extern tState
 	g_sStateLogo, g_sStateMenu, g_sStateGame, g_sStateGameInit,
-	g_sStateGameMap, g_sStateGameDrive, g_sStateGameBustGhost,  g_sStateGamePause;
+	g_sStateGameTown, g_sStateGameDrive, g_sStateGameBustGhost,  g_sStateGamePause;
 
 #endif // _GHOSTBUSTERS_H_
