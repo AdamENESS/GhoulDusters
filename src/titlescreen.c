@@ -159,7 +159,7 @@ void titleWait(void) {
 UBYTE titleFadeOut(void) {
 	//ptplayerWaitForSfx();
 	//ptplayerSfxDestroy(s_pSfxLmc);
-//	stateChange(g_pStateMachineGame, &g_sStateMenu);
+	stateChange(g_pStateMachineGame, &g_sStateGameTown);
 	return 1;
 }
 
