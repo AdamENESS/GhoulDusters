@@ -8,7 +8,7 @@ build-/
 beebo/
 lib/
 bin/
-
+gfx_rip/
 # Showcase
 showcase/showcase
 showcase/*.bmp
@@ -25,3 +25,4 @@ tools/*/*.plt
 
 showcase/NUL
 exe2adf.exe
+nul.d
