@@ -3,8 +3,8 @@
 #include <ace/utils/ptplayer.h>
 #include <ace/utils/bitmap.h>
 
-extern tBitMap *g_pSprites;
-extern tBitMap *g_pSpriteMask;
+extern tBitMap *g_pSprites16x;
+extern tBitMap *g_pSpriteMask16x;
 extern tBitMap *g_pTiles;
 
 

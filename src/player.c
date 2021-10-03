@@ -10,7 +10,7 @@ tPlayer* initPlayer(ULONG cash, UBYTE car)
 	
  	bobNewInit(
  		&pPlayer->_bobCarMap, 16, 16, 1,
- 		g_pSprites, g_pSpriteMask, 80, 100);
+ 		g_pSprites16x, g_pSpriteMask16x, 80, 100);
 
     return pPlayer;
 }
