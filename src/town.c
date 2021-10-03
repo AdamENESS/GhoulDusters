@@ -195,6 +195,8 @@ static void townGsLoop(void)
 	coreProcessBeforeBobs();
 	//tileBufferProcess(g_pMainBuffer);
 	//ghostCar.sPos.uwX= +1;
+	wandererProcess(g_pWanderers[0]);
+	wandererProcess(g_pWanderers[1]);
 	updatePlayer(g_pMainPlayer, bDirX, bDirY);
 		
 	// bobNewPush(&keyMaster);
