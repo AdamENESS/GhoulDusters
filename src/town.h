@@ -6,6 +6,13 @@
 #define _TOWNMAP_H_
 
 #include "tilemap.h"
+#include "wanderer.h"
+#include "player.h"
+
 
 tTileMap g_pTownMap;
+
+tPlayer* g_pMainPlayer;
+tWanderer* g_pWanderers[2];
+
 #endif // _TOWNMAP_H_

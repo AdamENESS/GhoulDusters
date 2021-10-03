@@ -14,8 +14,6 @@
 tStateManager *g_pStateMachineGame;
 static ULONG s_ulSampleSize;
 static UBYTE s_ubCurrentMod = 0;
-tPtplayerMod *g_pMods[MOD_COUNT];
-UWORD *g_pModSamples;
 
 static void onSongEnd(void) {
 	if(++s_ubCurrentMod >= MOD_COUNT) {
@@ -26,21 +24,23 @@ static void onSongEnd(void) {
 }
 
 void genericCreate(void) {
+	systemUse();
 	g_pStateMachineGame = stateManagerCreate();
 	keyCreate();
 	joyOpen();
 	ptplayerCreate(1);
-	g_pMods[0] = ptplayerModCreate("data/ghostbusters.mod");
+	//g_pMods[0] = ptplayerModCreate("data/ghostbusters.mod");
 	//g_pMods[1] = ptplayerModCreate("data/ghostbusters.mod");
-	s_ulSampleSize = fileGetSize("data/samples.samplepack");
-	g_pModSamples = memAllocChip(s_ulSampleSize);
-	tFile *pFileSamples = fileOpen("data/samples.samplepack", "rb");
-	fileRead(pFileSamples, g_pModSamples, s_ulSampleSize);
-	fileClose(pFileSamples);
+	//s_ulSampleSize = fileGetSize("data/samples.samplepack");
+	//g_pModSamples = memAllocChip(s_ulSampleSize);
+	//tFile *pFileSamples = fileOpen("data/samples.samplepack", "rb");
+	//fileRead(pFileSamples, g_pModSamples, s_ulSampleSize);
+	//fileClose(pFileSamples);
 
-	ptplayerLoadMod(g_pMods[s_ubCurrentMod], g_pModSamples, 0);
-	ptplayerConfigureSongRepeat(0, onSongEnd);
-	statePush(g_pStateMachineGame, &g_sStateLogo);
+	//ptplayerLoadMod(g_pMods[s_ubCurrentMod], g_pModSamples, 0);
+	//ptplayerConfigureSongRepeat(0, onSongEnd);
+	//statePush(g_pStateMachineGame, &g_sStateLogo);
+	statePush(g_pStateMachineGame, &g_sStateGameTown);
 
 }
 

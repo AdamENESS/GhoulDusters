@@ -8,7 +8,7 @@
 #include <ace/managers/viewport/tilebuffer.h>
 
 #define MAP_WIDTH_MAX 20
-#define MAP_HEIGHT_MAX 16
+#define MAP_HEIGHT_MAX 11
 #define MAP_TILESIZE_X 16
 #define MAP_TILESIZE_Y 16
 
@@ -21,11 +21,15 @@ typedef struct _tTileSet
 
 typedef struct _tTileMap
 {
+    UBYTE _width;
+    UBYTE _height;
     UBYTE _mapDataBase[MAP_WIDTH_MAX][MAP_HEIGHT_MAX];
-    UBYTE _mapDataModified[MAP_WIDTH_MAX][MAP_HEIGHT_MAX];
+    //UBYTE _mapDataModified[MAP_WIDTH_MAX][MAP_HEIGHT_MAX];
     tTileSet* _tileSet;
 
 } tTileMap;
+    
+UBYTE mapDataCopyFromMem(tTileMap *pMapData, const UBYTE* src, UBYTE width, BYTE height);
 
 UBYTE mapDataInitFromFile(tTileMap *pMapData, const char *szPath);
 
@@ -36,5 +40,7 @@ void mapDataClear(tTileMap *pMapData);
 void mapDataReset(tTileMap *pMapData);
 
 void mapDataSetTile(tTileMap *pMapData, UBYTE x, UBYTE y, UBYTE value);
+
+UBYTE mapDataGetTile(tTileMap *pMapData, UBYTE x, UBYTE y);
 
 #endif // _TILEMAP_H_

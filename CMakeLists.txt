@@ -1,8 +1,7 @@
 cmake_minimum_required(VERSION 3.14.0)
-project(Ghostbusters LANGUAGES ASM CXX C)
+project(Ghostbusters LANGUAGES C)
 
 set(CMAKE_C_STANDARD 11)
-set (CMAKE_CXX_STANDARD 11)
 #file(GLOB_RECURSE SOURCES src/c2p/*.c src/res/*.c src/misc/*.c include/*.h)
 file(GLOB_RECURSE SOURCES src/*.c src/*.h)
 #MESSAGE (${SOURCES})
@@ -63,22 +62,134 @@ set(RES_DIR ${CMAKE_CURRENT_LIST_DIR}/res)
 set(DATA_DIR ${CMAKE_CURRENT_BINARY_DIR}/data)
 set(GEN_DIR ${CMAKE_CURRENT_BINARY_DIR}/generated)
 
+set(TRANSPARENCY_HEX "#AAAAAA")
+
+file(
+	MAKE_DIRECTORY
+	${DATA_DIR} ${DATA_DIR}/sfx ${DATA_DIR}/intro ${DATA_DIR}/outro ${DATA_DIR}/sprites
+	${GEN_DIR}/game_bg ${GEN_DIR}/map ${GEN_DIR}/sprites/map  
+)
+
 # Palette
 set(PLT_PATH ${DATA_DIR})
 
-set(TRANSPARENCY_HEX "#000000")
+
 convertPalette(${GHOST_EXECUTABLE} ${RES_DIR}/bitmaps/germz.gpl ${PLT_PATH}/gemz.plt)
 convertPalette(${GHOST_EXECUTABLE} ${RES_DIR}/bitmaps/GB-Classic.gpl ${PLT_PATH}/GB-Classic.plt)
-convertPalette(${GHOST_EXECUTABLE} ${RES_DIR}/bitmaps/GB-Modern.gpl ${PLT_PATH}//GB-Modern.plt)
+convertPalette(${GHOST_EXECUTABLE} ${RES_DIR}/bitmaps/GB-Modern.gpl ${PLT_PATH}/GB-Modern.plt)
+convertPalette(${GHOST_EXECUTABLE} ${RES_DIR}/maps/Ghostbusters.gpl ${PLT_PATH}/maps/GB-Game.plt)
 
-convertBitmaps(
-	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/bitmaps/GB-Classic.gpl
-	INTERLEAVED SOURCES
-		${RES_DIR}/bitmaps/GB-Classic.png
+# set(CITYTILES "")
+# foreach(i RANGE 75)
+# MATH(EXPR offsX "0 + ${i} * 16")
+# extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/maps/City-Sheet16x.png
+# DESTINATIONS
+# ${GEN_DIR}/maps/${i}.png  ${offsX}   0 16 16
+# )
+# list(APPEND CITYTILES "${i}.png")
+# endforeach()
+# 	convertTileset(
+# 		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/bitmaps/GB-Classic.gpl
+# 		SOURCE ${GEN_DIR}/maps DESTINATION ${GEN_DIR}/citytiles.png
+# 		TILES ${CITYTILES}
+# 	)
+# convertBitmaps(
+# 	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/bitmaps/GB-Classic.gpl
+# 	INTERLEAVED SOURCES
+# 		${RES_DIR}/bitmaps/GB-Classic.png
+
+# 	DESTINATIONS
+# 		${DATA_DIR}/GB-Classic.bm
+
+# )
+
+set(MAPSPRITES "")
+foreach(i RANGE 6)
+	MATH(EXPR offsX "0 + ${i} * 16")
+	extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/spritesheet/Sprite-0003-Sheet.png
 	DESTINATIONS
-		${DATA_DIR}/GB-Classic.bm
+	${GEN_DIR}/sprites/map/${i}.png  ${offsX}   0 16 16
+	)
+	list(APPEND MAPSPRITES "${i}.png")
+	
+endforeach(i RANGE 6)
+
+
+foreach(i RANGE 6)
+	MATH(EXPR offsX "0 + ${i} * 16")
+	MATH(EXPR file "7 + ${i}")
+	extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/spritesheet/Sprite-0003-Sheet.png
+	DESTINATIONS
+	${GEN_DIR}/sprites/map/${file}.png  ${offsX}   16 16 16
+	)
+	list(APPEND MAPSPRITES "${file}.png")
+	
+endforeach(i RANGE 6)
+
+foreach(i RANGE 6)
+	MATH(EXPR offsX "0 + ${i} * 16")
+	MATH(EXPR file "14 + ${i}")
+	extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/spritesheet/Sprite-0003-Sheet.png
+	DESTINATIONS
+	${GEN_DIR}/sprites/map/${file}.png  ${offsX}   32 16 16
+	)
+	list(APPEND MAPSPRITES "${file}.png")
+	
+endforeach(i RANGE 6)
+
+convertTileset(
+		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
+		SOURCE ${GEN_DIR}/sprites/map DESTINATION ${GEN_DIR}/mapsprites.png
+		TILES ${CITYTILES}
 )
 
+convertBitmaps(
+	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl MASK_COLOR ${TRANSPARENCY_HEX}
+	INTERLEAVED SOURCES 
+		
+		${GEN_DIR}/mapsprites.png
+	DESTINATIONS
+		${DATA_DIR}/sprites/mapsprites.bm
+	MASKS
+		${DATA_DIR}/sprites/mapsprites_masks.bm
+)
+
+
+
+
+set(CITYTILES "")
+foreach(i RANGE 38)
+MATH(EXPR offsX "0 + ${i} * 16")
+extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/maps/City-Sheet.png
+DESTINATIONS
+${GEN_DIR}/maps/${i}.png  ${offsX}   0 16 16
+)
+list(APPEND CITYTILES "${i}.png")
+endforeach()
+
+convertTileset(
+		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
+		SOURCE ${GEN_DIR}/maps DESTINATION ${GEN_DIR}/citytiles.png
+		TILES ${CITYTILES}
+	)
+convertBitmaps(
+	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
+	INTERLEAVED SOURCES
+		${RES_DIR}/bitmaps/GB-Classic.png
+
+	DESTINATIONS
+		${DATA_DIR}/GB-Classic.bm
+
+)
+convertBitmaps(
+	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
+	INTERLEAVED SOURCES
+		
+		${GEN_DIR}/citytiles.png
+	DESTINATIONS
+	
+		${DATA_DIR}/maps/citytiles.bm
+)
 
 convertBitmaps(
 	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/bitmaps/GB-Modern.gpl
@@ -86,15 +197,8 @@ convertBitmaps(
 		${RES_DIR}/bitmaps/GB-Modern.png
 	DESTINATIONS
 		${DATA_DIR}/GB-Modern.bm
+		
 )
-
-#  mergeMods(
-#  	TARGET ${GHOST_EXECUTABLE}
-#  	SOURCES ${RES_DIR}/music/ghostbusters.mod
-#  	DESTINATIONS ${DATA_DIR}/ghostbusters.mod
-
-#  	SAMPLE_PACK ${DATA_DIR}/samples.samplepack
-# )
 
 mergeMods(
 	TARGET ${GHOST_EXECUTABLE}
@@ -113,7 +217,12 @@ convertFont(
 	TARGET ${GHOST_EXECUTABLE} FIRST_CHAR 29
 	SOURCE ${RES_DIR}/fonts/font_uni54.png DESTINATION ${DATA_DIR}/uni54.fnt
 )
-
+# Copy maps and defs
+file(
+	COPY
+		${RES_DIR}/maps/city8x.json ${RES_DIR}/maps/City-Sheet8x.json
+	DESTINATION ${DATA_DIR}/maps/
+)
 # Generating ZIP
 set(GHOST_ZIP_NAME "${CMAKE_PROJECT_NAME} ${VER_MAJOR}_${VER_MINOR}_${VER_FIX}")
 add_custom_target(generateZip COMMAND

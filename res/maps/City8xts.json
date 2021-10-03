@@ -1,0 +1,14 @@
+{ "columns":1,
+ "image":"City.png",
+ "imageheight":176,
+ "imagewidth":240,
+ "margin":0,
+ "name":"City",
+ "spacing":0,
+ "tilecount":1,
+ "tiledversion":"1.7.2",
+ "tileheight":176,
+ "tilewidth":240,
+ "type":"tileset",
+ "version":"1.6"
+}
