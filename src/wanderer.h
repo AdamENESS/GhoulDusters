@@ -7,8 +7,14 @@
 typedef struct _tWanderer
 {
     UBYTE _direction;
+    UBYTE _currentFrame;
+    UBYTE _frameOffset;
     UBYTE _ScreenX;
     UBYTE _SCreenY;
+    UBYTE _Frames[4][2];
+    BYTE _frameMod;
+    BYTE _currentFrameStep;
+    ULONG ulRepeatCounter;
     tBobNew _Bob;
 } tWanderer;
 

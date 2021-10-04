@@ -6,13 +6,14 @@
 
 typedef struct _tPlayer
 {
-    UBYTE _locX;
-    UBYTE _locY;
+    UWORD _locX;
+    UWORD _locY;
     UBYTE _carModel;
     UBYTE _equipment[15];
     ULONG _cash;
     char _name[16];
     tBobNew _bobCarMap;
+    tBobNew _bobCarTrail;
     tBobNew _bobCarDrive;
     tBobNew _bobMan[3];
     tBobNew _bobTrap;

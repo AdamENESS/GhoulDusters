@@ -126,7 +126,7 @@ static void logoGsDestroy(void) {
 void lmcFadeIn(void) {
 	if(s_ubFadeoutCnt == 0) {
 		systemUse();
-		paletteLoad("data/GB-classic.plt", s_pPaletteRef, 1 << s_pVp->ubBPP);
+		paletteLoad("data/maps/GB-Game.plt", s_pPaletteRef, 1 << s_pVp->ubBPP);
 		tBitMap *pLogo = bitmapCreateFromFile("data/GB-classic.bm", 0);
 		//s_pSfxLmc = ptplayerSfxCreateFromFile("data/sfx/lmc.sfx");
 		systemUnuse();
@@ -162,7 +162,7 @@ UBYTE lmcFadeOut(void) {
 	//ptplayerSfxDestroy(s_pSfxLmc);
 	ptplayerEnableMusic(0);
 	ptplayerSetMasterVolume(0);
-	stateChange(g_pStateMachineGame, &g_sStateMenu);
+	stateChange(g_pStateMachineGame, &g_sStateGameTown);
 	
 	return 1;
 }

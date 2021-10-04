@@ -7,31 +7,34 @@ tPlayer* initPlayer(ULONG cash, UBYTE car)
     pPlayer = memAllocFastClear(sizeof(tPlayer));
 	pPlayer->_cash = cash;
 	pPlayer->_carModel = car;
-	
+	pPlayer->_locX = 80;
+	pPlayer->_locY = 100;
  	bobNewInit(
  		&pPlayer->_bobCarMap, 16, 16, 1,
- 		g_pSprites16x, g_pSpriteMask16x, 80, 100);
+ 		g_pSprites16x, g_pSpriteMask16x, pPlayer->_locX, pPlayer->_locY);
 
     return pPlayer;
 }
 
 BYTE updatePlayer(tPlayer* player, BYTE joyX, BYTE joyY)
 {
-	player->_bobCarMap.sPos.uwX += joyX;
-	player->_bobCarMap.sPos.uwY += joyY;
-	if (player->_bobCarMap.sPos.uwX <= 0)
-		player->_bobCarMap.sPos.uwX = 304;
+	player->_locX += joyX;
+	player->_locY += joyY;
+	if (player->_locX <= 0)
+		player->_locX = 304;
 
-	if (player->_bobCarMap.sPos.uwX > 304)
-		player->_bobCarMap.sPos.uwX = 0;
+	if (player->_locX > 304)
+		player->_locX = 0;
 
-	if (player->_bobCarMap.sPos.uwY <= 0)
-		player->_bobCarMap.sPos.uwY = 160;
+	if (player->_locY <= 0)
+		player->_locY = 160;
 
-	if (player->_bobCarMap.sPos.uwY > 160)
-		player->_bobCarMap.sPos.uwY = 0;
+	if (player->_locY > 160)
+		player->_locY = 0;
 
-     bobNewPush(&player->_bobCarMap);
+	player->_bobCarMap.sPos.uwX = player->_locX;
+	player->_bobCarMap.sPos.uwY = player->_locY;
+    bobNewPush(&player->_bobCarMap);
 
-     return 0;
+    return 0;
 }

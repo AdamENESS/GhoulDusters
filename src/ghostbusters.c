@@ -39,8 +39,8 @@ void genericCreate(void) {
 
 	//ptplayerLoadMod(g_pMods[s_ubCurrentMod], g_pModSamples, 0);
 	//ptplayerConfigureSongRepeat(0, onSongEnd);
-	//statePush(g_pStateMachineGame, &g_sStateLogo);
-	statePush(g_pStateMachineGame, &g_sStateGameTown);
+	statePush(g_pStateMachineGame, &g_sStateLogo);
+	//statePush(g_pStateMachineGame, &g_sStateGameTown);
 
 }
 

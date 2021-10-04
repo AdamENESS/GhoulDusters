@@ -31,6 +31,7 @@ void coreProcessBeforeBobs(void)
 {
 	// Undraw all bobs
 	//debugColor(0x008);
+timerOnInterrupt();
 	bobNewBegin();
 
 	// Draw pending tiles
@@ -203,6 +204,8 @@ static void townGsLoop(void)
 	// bobNewPush(&gateKeeper);
 	// bobNewPush(&ghostCar);
 	coreProcessAfterBobs();
+	vPortWaitForEnd(s_pVpMain);
+	viewUpdateCLUT(s_pView);
 }
 
 static void townGsDestroy(void)
