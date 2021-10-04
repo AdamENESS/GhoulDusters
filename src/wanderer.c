@@ -46,7 +46,7 @@ void wandererProcess(tWanderer* pWanderer)
         */
 
         ULONG ulNow = timerGet();
-	    UBYTE isRepeat = timerGetDelta(pWanderer->ulRepeatCounter, ulNow) >= 10;
+	    UBYTE isRepeat = timerGetDelta(pWanderer->ulRepeatCounter, ulNow) >= 25;
         if(isRepeat)
         {
                 //playerSetCursorPos(pPlayer, pPlayer->pNodeCursor->pNeighbors[eDir]);

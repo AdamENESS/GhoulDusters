@@ -20,4 +20,5 @@ extern UWORD *g_pModSamples;
 
 void loadMapAssets(void);
 void destroyMapAssets(void);
+void loadMusicAssets(void);
 #endif // _ASSETS_H_

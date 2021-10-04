@@ -29,16 +29,12 @@ tTileBufferManager *g_pMainBuffer;
 
 void coreProcessBeforeBobs(void)
 {
-	// Undraw all bobs
-	//debugColor(0x008);
-timerOnInterrupt();
+	timerOnInterrupt();
 	bobNewBegin();
 
 	// Draw pending tiles
 	tileBufferQueueProcess(g_pMainBuffer);
 
-	// Draw dino bones before anything else
-	//	dinoProcess();
 }
 
 void coreProcessAfterBobs(void)
@@ -51,19 +47,8 @@ void coreProcessAfterBobs(void)
 	// Update HUD state machine and draw stuff
 	//hudUpdate();
 
-	// Load next base tiles, if needed
-	//	baseTileProcess();
-
-	// Update palette for new ground layers, also take into account fade level
-	//fadeProcess();
-	//UBYTE ubFadeLevel = fadeGetLevel();
-	//groundLayerProcess(g_pMainBuffer->pCamera->uPos.uwY, ubFadeLevel);
-	//mainPaletteProcess(ubFadeLevel);
-
-	//debugColor(0x800);
 	viewProcessManagers(s_pView);
 	copProcessBlocks();
-	//debugColor(*s_pColorBg);
 	vPortWaitForEnd(s_pVpMain);
 }
 
@@ -72,7 +57,7 @@ static void townGsCreate(void)
 {
 	logBlockBegin("townGsCreate()");
 	
-	loadMapAssets();
+
 
 	s_pView = viewCreate(0,
 						 TAG_VIEW_GLOBAL_CLUT, 1,
@@ -117,20 +102,6 @@ static void townGsCreate(void)
 	bobNewManagerCreate(
 		g_pMainBuffer->pScroll->pFront, g_pMainBuffer->pScroll->pBack,
 		g_pMainBuffer->pScroll->uwBmAvailHeight);
-
-// 	bobNewInit(
-// 		&ghostCar, 16, 16, 1,
-// 		s_pMapSprites, s_pMapMask, 80, 100);
-
-// 	bobNewInit(
-// 		&keyMaster, 16, 16, 1,
-// 		s_pMapSprites, s_pMapMask, 0, 30);
-
-// bobNewSetBitMapOffset(&keyMaster, 16*1);
-// 	bobNewInit(
-// 		&gateKeeper, 16, 16, 1,
-// 		s_pMapSprites, s_pMapMask, 0, 160);
-// bobNewSetBitMapOffset(&gateKeeper, 16*9);
 	
 	g_pMainPlayer = initPlayer(10000, 1);
 
@@ -149,70 +120,66 @@ static void townGsCreate(void)
 	logBlockEnd("townGsCreate()");
 }
 
-static void townGsLoop(void)
+void handleInput(BYTE* bDirX, BYTE *bDirY)
 {
-	//MCOP_NOP;
-	//g_pMainBuffer->pCamera->uPos.uwX += 1;
-	//g_pMainBuffer->pCamera->uPos.uwY += 1;
-	BYTE bDirX = 0, bDirY = 0;
-	//if(g_is1pKbd) {
 	if (keyCheck(KEY_D))
 	{
-		bDirX += 1;
+		*bDirX += 1;
 	}
 	if (keyCheck(KEY_A))
 	{
-		bDirX -= 1;
+		*bDirX -= 1;
 	}
 	if (keyCheck(KEY_S))
 	{
-		bDirY += 1;
+		*bDirY += 1;
 	}
 	if (keyCheck(KEY_W))
 	{
-		bDirY -= 1;
+		*bDirY -= 1;
 	}
-	//}
-	//else {
+
 	if (joyCheck(JOY1_RIGHT))
 	{
-		bDirX += 1;
+		*bDirX += 1;
 	}
 	if (joyCheck(JOY1_LEFT))
 	{
-		bDirX -= 1;
+		*bDirX -= 1;
 	}
 	if (joyCheck(JOY1_DOWN))
 	{
-		bDirY += 1;
+		*bDirY += 1;
 	}
 	if (joyCheck(JOY1_UP))
 	{
-		bDirY -= 1;
+		*bDirY -= 1;
 	}
-	//}
-	//vehicleMove(&g_pVehicles[0], bDirX, bDirY);
+}
+
+static void townGsLoop(void)
+{
+
+	BYTE bDirX = 0, bDirY = 0;
+	handleInput(&bDirX, &bDirY);
 
 	coreProcessBeforeBobs();
-	//tileBufferProcess(g_pMainBuffer);
-	//ghostCar.sPos.uwX= +1;
 	wandererProcess(g_pWanderers[0]);
 	wandererProcess(g_pWanderers[1]);
+
 	updatePlayer(g_pMainPlayer, bDirX, bDirY);
-		
-	// bobNewPush(&keyMaster);
-	// bobNewPush(&gateKeeper);
-	// bobNewPush(&ghostCar);
+
 	coreProcessAfterBobs();
+
 	vPortWaitForEnd(s_pVpMain);
-	viewUpdateCLUT(s_pView);
+	//viewUpdateCLUT(s_pView);
 }
 
 static void townGsDestroy(void)
 {
 	logBlockBegin("townGsDestroy()");
 	systemUse();
-	destroyMapAssets();
+
 	viewDestroy(s_pView);
 	logBlockEnd("townGsDestroy()");
 }

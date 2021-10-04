@@ -64,7 +64,7 @@ static void logoGsCreate(void) {
 	logBlockEnd("logoGsCreate()");
 	systemUnuse();
 	viewLoad(s_pView);
-	ptplayerEnableMusic(1);
+
 	
 }
 
@@ -78,6 +78,7 @@ static void logoGsLoop(void) {
 		if(s_ubFadeoutCnt >= 50) {
 			s_eFadeState = FADE_STATE_IDLE;
 			s_ubFrame = 0;
+			loadMapAssets();
 		}
 		else {
 			if(s_cbFadeIn) {
@@ -148,7 +149,7 @@ void lmcFadeIn(void) {
 
 void lmcWait(void) {
 	++s_ubFrame;
-	if( s_isAnyPressed) {
+	if( s_eFadeState == FADE_STATE_IDLE) {
 		s_eFadeState = FADE_STATE_OUT;
 	}
 	else if(s_ubFrame == 1){
@@ -160,8 +161,6 @@ void lmcWait(void) {
 UBYTE lmcFadeOut(void) {
 	//ptplayerWaitForSfx();
 	//ptplayerSfxDestroy(s_pSfxLmc);
-	ptplayerEnableMusic(0);
-	ptplayerSetMasterVolume(0);
 	stateChange(g_pStateMachineGame, &g_sStateGameTown);
 	
 	return 1;
