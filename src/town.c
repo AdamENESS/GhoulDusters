@@ -23,11 +23,19 @@ tTileBufferManager *g_pMainBuffer;
 static UWORD s_uwDistanceTravelled;
 // Sprites
 
-// tBobNew ghostCar;
-// tBobNew ghosts[4];
-// tBobNew gateKeeper;
-// tBobNew keyMaster;
+UBYTE g_buildings[40] = {
+						BT_1S, BT_2S, BT_3S, BT_1S, BT_2S, BT_SP, BT_2S, BT_1S, 
+						BT_3S, BT_1S, BT_2S, BT_3S, BT_1S, BT_2S, BT_3S, BT_1S,
+						BT_1S, BT_3S, BT_3S, BT_1S, BT_ZL, BT_3S, BT_2S, BT_1S,
+						BT_2S, BT_2S, BT_1S, BT_2S, BT_3S, BT_1S, BT_3S, BT_2S,
+						BT_1S, BT_2S, BT_HQ, BT_1S, BT_2S, BT_3S, BT_2S, BT_1S};
 
+
+void setMapBuilding(tTileBufferManager* pMapBuffer, UBYTE building, UBYTE status)
+{
+	UBYTE x=0,y=0;
+	g_pMainBuffer->pTileData[x][y] = g_pTownMap._mapDataBase[x][y] + (status *39);
+}
 void coreProcessBeforeBobs(void)
 {
 	//	timerOnInterrupt();
@@ -48,6 +56,7 @@ void coreProcessBeforeBobs(void)
 		lastY = y;
 
 		static UWORD t = 0;
+		setMapBuilding(g_pMainBuffer,1, 2);
 		// tileBufferSetTile(g_pMainBuffer, 1, 1, g_pTownMap._mapDataBase[1][1]+(t*39));
 		// tileBufferSetTile(g_pMainBuffer, 2, 1, g_pTownMap._mapDataBase[2][1]+(t*39));
 		// tileBufferSetTile(g_pMainBuffer, 3, 1, g_pTownMap._mapDataBase[3][1]+(t*39));
@@ -78,6 +87,11 @@ void coreProcessAfterBobs(void)
 	viewProcessManagers(s_pView);
 	copProcessBlocks();
 	vPortWaitForEnd(s_pVpMain);
+}
+
+void initBuildings(void)
+{
+	//
 }
 
 static void townGsCreate(void)
@@ -138,7 +152,7 @@ static void townGsCreate(void)
 
 	g_pWanderers[0] = initWanderer(0);
 	g_pWanderers[1] = initWanderer(1);
-
+	initBuildings();
 	bobNewAllocateBgBuffers();
 
 	systemUnuse();
