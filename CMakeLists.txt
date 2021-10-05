@@ -100,7 +100,6 @@ convertPalette(${GHOST_EXECUTABLE} ${RES_DIR}/maps/Ghostbusters.gpl ${PLT_PATH}/
 
 # 	DESTINATIONS
 # 		${DATA_DIR}/GB-Classic.bm
-
 # )
 
 set(MAPSPRITES "")
@@ -137,6 +136,7 @@ foreach(i RANGE 6)
 	
 endforeach(i RANGE 6)
 
+
 convertTileset(
 		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
 		SOURCE ${GEN_DIR}/sprites/map DESTINATION ${GEN_DIR}/mapsprites.png
@@ -165,6 +165,28 @@ DESTINATIONS
 ${GEN_DIR}/maps/${i}.png  ${offsX}   0 16 16
 )
 list(APPEND CITYTILES "${i}.png")
+endforeach()
+
+
+foreach(i RANGE 38)
+MATH(EXPR offsX "0 + ${i} * 16")
+MATH(EXPR file "39 + ${i}")
+extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/maps/City-Sheet.png
+DESTINATIONS
+${GEN_DIR}/maps/${file}.png  ${offsX}   16 16 16
+)
+list(APPEND CITYTILES "${file}.png")
+endforeach()
+
+
+foreach(i RANGE 38)
+MATH(EXPR offsX "0 + ${i} * 16")
+MATH(EXPR file "78 + ${i}")
+extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/maps/City-Sheet.png
+DESTINATIONS
+${GEN_DIR}/maps/${file}.png  ${offsX}   32 16 16
+)
+list(APPEND CITYTILES "${file}.png")
 endforeach()
 
 convertTileset(

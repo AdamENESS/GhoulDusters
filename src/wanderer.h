@@ -9,13 +9,13 @@ typedef struct _tWanderer
     UBYTE _direction;
     UBYTE _currentFrame;
     UBYTE _frameOffset;
-    UBYTE _ScreenX;
-    UBYTE _SCreenY;
+    UWORD _ScreenX;
+    UWORD _ScreenY;
     UBYTE _Frames[4][2];
     BYTE _frameMod;
     BYTE _currentFrameStep;
-    ULONG ulRepeatCounter;
-    tBobNew _Bob;
+    ULONG ulFrameCounter;
+    tBobNew _Bob;   
 } tWanderer;
 
 

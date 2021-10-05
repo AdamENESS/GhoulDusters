@@ -7,19 +7,20 @@
 #include <ace/managers/key.h>
 #include <ace/managers/blit.h>
 #include <ace/utils/palette.h>
+#include <ace/managers/rand.h>
 #include <ace/managers/viewport/tilebuffer.h>
 #include "maps/city16x.h"
 #include "bob_new.h"
 #include "assets.h"
-#define GAME_BPP 5
 
+#define GAME_BPP 5
 
 static UWORD s_pPaletteRef[1 << GAME_BPP];
 static UWORD *s_pColorBg;
 static tView *s_pView;
 static tVPort *s_pVpMain;
 tTileBufferManager *g_pMainBuffer;
-
+static UWORD s_uwDistanceTravelled;
 // Sprites
 
 // tBobNew ghostCar;
@@ -29,12 +30,39 @@ tTileBufferManager *g_pMainBuffer;
 
 void coreProcessBeforeBobs(void)
 {
-	timerOnInterrupt();
+	//	timerOnInterrupt();
 	bobNewBegin();
-
 	// Draw pending tiles
 	tileBufferQueueProcess(g_pMainBuffer);
+	static UWORD lastX = 0xFFFF;
+	static UWORD lastY = 0xFFFF;
+	// blit any map dots.
+	UWORD x = (g_pMainPlayer->_locModX << 3) + 4; //pulRandMinMax(0,19) * 16;
+	UWORD y = (g_pMainPlayer->_locModY << 3) + 4; //ulRandMinMax(0,10) * 16;
+	blitCopyMask(g_pSprites16x, 0, 16 * 17, g_pMainBuffer->pScroll->pBack, x, y, 16, 16, (UWORD *)g_pSpriteMask16x->Planes[0]);
+	//blitCopyMask(g_pSprites16x, 0, 16 * 17, g_pMainBuffer->pScroll->pFront, x, y, 16, 16, (UWORD *)g_pSpriteMask16x->Planes[0]);
+	if (x != lastX || y != lastY)
+	{
+		s_uwDistanceTravelled++;
+		lastX = x;
+		lastY = y;
 
+		static UWORD t = 0;
+		// tileBufferSetTile(g_pMainBuffer, 1, 1, g_pTownMap._mapDataBase[1][1]+(t*39));
+		// tileBufferSetTile(g_pMainBuffer, 2, 1, g_pTownMap._mapDataBase[2][1]+(t*39));
+		// tileBufferSetTile(g_pMainBuffer, 3, 1, g_pTownMap._mapDataBase[3][1]+(t*39));
+		
+		// tileBufferSetTile(g_pMainBuffer, 1, 2, g_pTownMap._mapDataBase[1][2]+(t*39));
+		// tileBufferSetTile(g_pMainBuffer, 2, 2, g_pTownMap._mapDataBase[2][2]+(t*39));
+		// tileBufferSetTile(g_pMainBuffer, 3, 2, g_pTownMap._mapDataBase[3][2]+(t*39));
+		// tileBufferSetTile(g_pMainBuffer, 1, 3, g_pTownMap._mapDataBase[1][3]+(t*39));
+		// tileBufferSetTile(g_pMainBuffer, 2, 3, g_pTownMap._mapDataBase[2][3]+(t*39));
+		// tileBufferSetTile(g_pMainBuffer, 3, 3, g_pTownMap._mapDataBase[3][3]+(t*39));
+		
+		t++;
+		if (t > 2)
+			t = 0;
+	}
 }
 
 void coreProcessAfterBobs(void)
@@ -52,12 +80,9 @@ void coreProcessAfterBobs(void)
 	vPortWaitForEnd(s_pVpMain);
 }
 
-
 static void townGsCreate(void)
 {
 	logBlockBegin("townGsCreate()");
-	
-
 
 	s_pView = viewCreate(0,
 						 TAG_VIEW_GLOBAL_CLUT, 1,
@@ -66,7 +91,7 @@ static void townGsCreate(void)
 	s_pVpMain = vPortCreate(0,
 							TAG_VPORT_VIEW, s_pView,
 							TAG_VPORT_WIDTH, 320,
-							TAG_VPORT_HEIGHT, 200,
+							TAG_VPORT_HEIGHT, 176,
 							TAG_VPORT_BPP, GAME_BPP,
 							TAG_END);
 	g_pMainBuffer = tileBufferCreate(0,
@@ -76,7 +101,7 @@ static void townGsCreate(void)
 									 TAG_TILEBUFFER_BOUND_TILE_Y, CITY16X_HEIGHT,
 									 TAG_TILEBUFFER_IS_DBLBUF, 1,
 									 TAG_TILEBUFFER_TILE_SHIFT, 4,
-									 TAG_TILEBUFFER_REDRAW_QUEUE_LENGTH, 100,
+									 TAG_TILEBUFFER_REDRAW_QUEUE_LENGTH, 10,
 									 TAG_TILEBUFFER_TILESET, g_pTiles,
 									 TAG_END);
 
@@ -102,12 +127,18 @@ static void townGsCreate(void)
 	bobNewManagerCreate(
 		g_pMainBuffer->pScroll->pFront, g_pMainBuffer->pScroll->pBack,
 		g_pMainBuffer->pScroll->uwBmAvailHeight);
-	
+#ifdef GAME_DEBUG
+	randInit(2184);
+#else
+	// Seed from beam pos Y & X
+	randInit((getRayPos().bfPosY << 8) | getRayPos().bfPosX);
+#endif
+
 	g_pMainPlayer = initPlayer(10000, 1);
 
 	g_pWanderers[0] = initWanderer(0);
 	g_pWanderers[1] = initWanderer(1);
-	
+
 	bobNewAllocateBgBuffers();
 
 	systemUnuse();
@@ -120,8 +151,14 @@ static void townGsCreate(void)
 	logBlockEnd("townGsCreate()");
 }
 
-void handleInput(BYTE* bDirX, BYTE *bDirY)
+void handleInput(BYTE *bDirX, BYTE *bDirY)
 {
+	if (joyCheck(JOY1_FIRE))
+	{
+		s_uwDistanceTravelled = 0;
+		tileBufferRedrawAll(g_pMainBuffer);
+		bobNewDiscardUndraw();
+	}
 	if (keyCheck(KEY_D))
 	{
 		*bDirX += 1;
@@ -164,6 +201,7 @@ static void townGsLoop(void)
 	handleInput(&bDirX, &bDirY);
 
 	coreProcessBeforeBobs();
+
 	wandererProcess(g_pWanderers[0]);
 	wandererProcess(g_pWanderers[1]);
 
@@ -171,7 +209,7 @@ static void townGsLoop(void)
 
 	coreProcessAfterBobs();
 
-	vPortWaitForEnd(s_pVpMain);
+	//vPortWaitForEnd(s_pVpMain);
 	//viewUpdateCLUT(s_pView);
 }
 

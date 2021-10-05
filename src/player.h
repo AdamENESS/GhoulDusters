@@ -8,6 +8,7 @@ typedef struct _tPlayer
 {
     UWORD _locX;
     UWORD _locY;
+    UBYTE _locModX, _locModY;
     UBYTE _carModel;
     UBYTE _equipment[15];
     ULONG _cash;
@@ -17,10 +18,13 @@ typedef struct _tPlayer
     tBobNew _bobCarDrive;
     tBobNew _bobMan[3];
     tBobNew _bobTrap;
+
+    ULONG ulFrameCounter;
 } tPlayer;
 
 tPlayer* initPlayer(ULONG cash, UBYTE car);
 BYTE updatePlayer(tPlayer* player, BYTE joyX, BYTE joyY);
 
+//void playerGetCenter(tPlayer* player)
 
 #endif // _GHOSTBUSTER_PLAYER_H_

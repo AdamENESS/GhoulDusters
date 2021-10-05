@@ -7,6 +7,7 @@
 #include <ace/managers/joy.h>
 #include <ace/managers/state.h>
 #include <ace/utils/ptplayer.h>
+#include <ace/managers/rand.h>
 #include "ghostbusters.h"
 
 tStateManager *g_pStateMachineGame;
@@ -22,7 +23,7 @@ static void onSongEnd(void) {
 }
 
 void genericCreate(void) {
-	systemUse();
+	
 	g_pStateMachineGame = stateManagerCreate();
 	keyCreate();
 	joyOpen();
