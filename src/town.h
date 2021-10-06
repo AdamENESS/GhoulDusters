@@ -31,6 +31,8 @@
 
 #define BT_ZA 15
 
+#define BT_UNK 0xFF // reserved for random map generation.
+
 
 tTileMap g_pTownMap;
 

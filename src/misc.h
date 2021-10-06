@@ -3,6 +3,6 @@
 
 #include <ace/types.h>
 
-BYTE canMoveY(UWORD val);
-BYTE canMoveX(UWORD val);
+BYTE canMoveY(UWORD val, UBYTE gap);
+BYTE canMoveX(UWORD val, UBYTE gap);
 #endif // _MISC_H_

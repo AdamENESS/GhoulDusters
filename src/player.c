@@ -41,7 +41,7 @@ BYTE updatePlayer(tPlayer *pPlayer, BYTE joyX, BYTE joyY)
 	//UBYTE isRepeat = timerGetDelta(pPlayer->ulFrameCounter, ulNow) >= 1;
 	//if (isRepeat)
 	{
-		if (canMoveX(pPlayer->_locY-4))
+		if (canMoveX(pPlayer->_locY-4,3))
 		{
 			pPlayer->_locX += joyX;
 			if (pPlayer->_locX <= 0)
@@ -51,7 +51,7 @@ BYTE updatePlayer(tPlayer *pPlayer, BYTE joyX, BYTE joyY)
 				pPlayer->_locX = 0;
 		}
 
-		if (canMoveY(pPlayer->_locX+4))
+		if (canMoveY(pPlayer->_locX+4,3))
 		{
 			pPlayer->_locY += joyY;
 	
@@ -62,6 +62,7 @@ BYTE updatePlayer(tPlayer *pPlayer, BYTE joyX, BYTE joyY)
 			if (pPlayer->_locY > 160)
 				pPlayer->_locY = 0;
 		}
+		
 		pPlayer->_locModX = pPlayer->_locX >> 3;
 		pPlayer->_locModY = pPlayer->_locY >> 3;
 

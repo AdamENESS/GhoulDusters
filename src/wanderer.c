@@ -103,7 +103,7 @@ void wandererProcess(tWanderer *pWanderer)
             case 0:
             case 1:
             {
-                if (canMoveX(pWanderer->_ScreenY + 4))
+                if (canMoveX(pWanderer->_ScreenY + 4,0))
                 {
                     pWanderer->_direction =( uwRandMinMax(0,10) > 6)? 2:3;
                 }
@@ -113,7 +113,7 @@ void wandererProcess(tWanderer *pWanderer)
             case 2:
             case 3:
             {
-                if (canMoveY(pWanderer->_ScreenX + 4))
+                if (canMoveY(pWanderer->_ScreenX + 4,0))
                 {
                     pWanderer->_direction = ( uwRandMinMax(0,10) > 6)? 0:1;
                 }
