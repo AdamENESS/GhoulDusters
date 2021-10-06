@@ -33,6 +33,9 @@ UBYTE g_buildings[40] = {
 
 void setMapBuilding(tTileBufferManager* pMapBuffer, UBYTE building, UBYTE status)
 {
+	UBYTE bRow = status >> 3;
+	UBYTE bCol = status - (bRow << 3);
+	
 	UBYTE x=0,y=0;
 	g_pMainBuffer->pTileData[x][y] = g_pTownMap._mapDataBase[x][y] + (status *39);
 }
@@ -57,16 +60,6 @@ void coreProcessBeforeBobs(void)
 
 		static UWORD t = 0;
 		setMapBuilding(g_pMainBuffer,1, 2);
-		// tileBufferSetTile(g_pMainBuffer, 1, 1, g_pTownMap._mapDataBase[1][1]+(t*39));
-		// tileBufferSetTile(g_pMainBuffer, 2, 1, g_pTownMap._mapDataBase[2][1]+(t*39));
-		// tileBufferSetTile(g_pMainBuffer, 3, 1, g_pTownMap._mapDataBase[3][1]+(t*39));
-		
-		// tileBufferSetTile(g_pMainBuffer, 1, 2, g_pTownMap._mapDataBase[1][2]+(t*39));
-		// tileBufferSetTile(g_pMainBuffer, 2, 2, g_pTownMap._mapDataBase[2][2]+(t*39));
-		// tileBufferSetTile(g_pMainBuffer, 3, 2, g_pTownMap._mapDataBase[3][2]+(t*39));
-		// tileBufferSetTile(g_pMainBuffer, 1, 3, g_pTownMap._mapDataBase[1][3]+(t*39));
-		// tileBufferSetTile(g_pMainBuffer, 2, 3, g_pTownMap._mapDataBase[2][3]+(t*39));
-		// tileBufferSetTile(g_pMainBuffer, 3, 3, g_pTownMap._mapDataBase[3][3]+(t*39));
 		
 		t++;
 		if (t > 2)
@@ -147,12 +140,16 @@ static void townGsCreate(void)
 	// Seed from beam pos Y & X
 	randInit((getRayPos().bfPosY << 8) | getRayPos().bfPosX);
 #endif
-
-	g_pMainPlayer = initPlayer(10000, 1);
-
-	g_pWanderers[0] = initWanderer(0);
-	g_pWanderers[1] = initWanderer(1);
-	initBuildings();
+	if (g_pMainPlayer == NULL)
+	{
+		g_pMainPlayer = initPlayer(10000, 1);
+		g_pWanderers[0] = initWanderer(0);
+		g_pWanderers[1] = initWanderer(1);
+	}
+	playerInitBobs(g_pMainPlayer);
+	wandererInitBobs(g_pWanderers[0]);
+	wandererInitBobs(g_pWanderers[1]);
+	//initBuildings();
 	bobNewAllocateBgBuffers();
 
 	systemUnuse();

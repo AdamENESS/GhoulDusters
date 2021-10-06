@@ -28,14 +28,19 @@ tWanderer *initWanderer(UBYTE personType)
         }
     }
 
-    bobNewInit(
+ 
+    pWanderer->_currentFrameStep = 0;
+
+    return pWanderer;
+}
+
+void wandererInitBobs(tWanderer* pWanderer)
+{
+   bobNewInit(
         &pWanderer->_Bob, 16, 16, 1,
         g_pSprites16x, g_pSpriteMask16x, pWanderer->_ScreenX, pWanderer->_ScreenY);
     bobNewSetBitMapOffset(&pWanderer->_Bob, pWanderer->_frameOffset * pWanderer->_currentFrame);
 
-    pWanderer->_currentFrameStep = 0;
-
-    return pWanderer;
 }
 
 void wandererProcess(tWanderer *pWanderer)

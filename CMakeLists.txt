@@ -190,7 +190,7 @@ list(APPEND CITYTILES "${file}.png")
 endforeach()
 
 convertTileset(
-		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
+		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl 
 		SOURCE ${GEN_DIR}/maps DESTINATION ${GEN_DIR}/citytiles.png
 		TILES ${CITYTILES}
 	)
@@ -204,13 +204,14 @@ convertBitmaps(
 
 )
 convertBitmaps(
-	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
+	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl MASK_COLOR ${TRANSPARENCY_HEX}
 	INTERLEAVED SOURCES
 		
 		${GEN_DIR}/citytiles.png
 	DESTINATIONS
-	
 		${DATA_DIR}/maps/citytiles.bm
+	MASKS
+		${DATA_DIR}/maps/citytilesMasked.bm
 )
 
 convertBitmaps(

@@ -11,6 +11,7 @@ extern tBitMap *g_pSpriteMask32x;
 
 
 extern tBitMap *g_pTiles;
+extern tBitMap *g_pTilesMask;
 
 // Music
 #define MOD_COUNT 1

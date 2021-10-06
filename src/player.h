@@ -23,6 +23,7 @@ typedef struct _tPlayer
 } tPlayer;
 
 tPlayer* initPlayer(ULONG cash, UBYTE car);
+void playerInitBobs(tPlayer* pPlayer);
 BYTE updatePlayer(tPlayer* player, BYTE joyX, BYTE joyY);
 
 //void playerGetCenter(tPlayer* player)

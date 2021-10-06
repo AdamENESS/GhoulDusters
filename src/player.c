@@ -13,10 +13,7 @@ tPlayer *initPlayer(ULONG cash, UBYTE car)
 	pPlayer->_locY = 156;
 	pPlayer->_locModX = pPlayer->_locX >> 3;
 	pPlayer->_locModY = pPlayer->_locY >> 3;
-	bobNewInit(
-		&pPlayer->_bobCarMap, 16, 16,1,
-		g_pSprites16x, g_pSpriteMask16x, pPlayer->_locX, pPlayer->_locY);
-
+	
 
 // bobNewInit(
 // 		&pPlayer->_bobCarTrail, 16, 16, 0,
@@ -29,6 +26,13 @@ tPlayer *initPlayer(ULONG cash, UBYTE car)
 	return pPlayer;
 }
 
+void playerInitBobs(tPlayer* pPlayer)
+{
+	bobNewInit(
+		&pPlayer->_bobCarMap, 16, 16,1,
+		g_pSprites16x, g_pSpriteMask16x, pPlayer->_locX, pPlayer->_locY);
+
+}
 
 BYTE updatePlayer(tPlayer *pPlayer, BYTE joyX, BYTE joyY)
 {

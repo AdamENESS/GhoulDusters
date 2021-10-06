@@ -22,7 +22,7 @@ typedef struct _tWanderer
 void wandererProcess(tWanderer* pWanderer);
 
 tWanderer* initWanderer(UBYTE personType);
-
+void wandererInitBobs(tWanderer* pWanderer);
 void destroyWanderer(tWanderer* pWanderer);
 
 void wandererSetDestination(tWanderer* pWanderer, UBYTE x, UBYTE y); // Make way to zuul for example.
