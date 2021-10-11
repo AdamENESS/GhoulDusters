@@ -10,6 +10,8 @@
 #include "player.h"
 #include "ghost.h"
 
+typedef struct _tMarshMan tMarshMan;
+
 #define BT_HQ 0 //  Ghost HQ
 #define BT_SP 1 //  Shoppie
 #define BT_ZL 2 //  ZULL
@@ -39,6 +41,9 @@ tTileMap g_pTownMap;
 tPlayer *g_pMainPlayer = NULL;
 tWanderer *g_pWanderers[2] = {NULL, NULL};
 tGhost *g_pGhosts[4] = {NULL, NULL, NULL, NULL};
+
+tGhost *g_pMarshGhosts[4] = {NULL, NULL, NULL, NULL};
+tMarshMan *g_pMarshMellowMan = NULL;
 extern UBYTE g_buildings[40];
 
 #endif // _TOWNMAP_H_
