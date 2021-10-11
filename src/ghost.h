@@ -5,7 +5,7 @@
 #include "bob_new.h"
 
 #define GHOST_ZULL_X 170
-#define GHOST_ZULL_Y 100
+#define GHOST_ZULL_Y 90
 #define GHOST_ZULL_STEPS 100
 
 typedef struct _tGhost
@@ -21,6 +21,7 @@ typedef struct _tGhost
     ULONG ulFrameCounter;
     BYTE _currentFrameStep;
     BYTE _currentZullStep;
+    BYTE _respawnDelay;
 } tGhost;
 
 

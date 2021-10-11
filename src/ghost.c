@@ -10,7 +10,12 @@ void ghostProcess(tGhost *pGhost)
     UBYTE isUpdate = timerGetDelta(pGhost->ulFrameCounter, ulNow) >= 10;
     if (isUpdate)
     {
-
+             pGhost->ulFrameCounter = ulNow;
+            if (pGhost->_respawnDelay > 0)
+            {
+                pGhost->_respawnDelay --;
+                return;
+            }
            pGhost->_currentFrameStep += 1;
            pGhost->_currentZullStep+=1;
             if (pGhost->_currentZullStep >= GHOST_ZULL_STEPS)
@@ -21,12 +26,12 @@ void ghostProcess(tGhost *pGhost)
             if (pGhost->_currentFrameStep > 1)
                 pGhost->_currentFrameStep = 0;
 
-            pGhost->ulFrameCounter = ulNow;
+            
       
         //m_fValueEnd = m_fMin + fRandom * (m_fMax - m_fMin);
         
-        pGhost->_ScreenX =  pGhost->_StartX + (pGhost->_currentZullStep * (GHOST_ZULL_X - pGhost->_StartX));
-        pGhost->_ScreenY =  pGhost->_StartY + (pGhost->_currentZullStep * (GHOST_ZULL_Y - pGhost->_StartY));
+        pGhost->_ScreenX =  pGhost->_StartX + ((pGhost->_currentZullStep * (GHOST_ZULL_X - pGhost->_StartX))/ GHOST_ZULL_STEPS);
+        pGhost->_ScreenY =  pGhost->_StartY + ((pGhost->_currentZullStep * (GHOST_ZULL_Y - pGhost->_StartY))/ GHOST_ZULL_STEPS);
         pGhost->_Bob.sPos.uwX = pGhost->_ScreenX;
         pGhost->_Bob.sPos.uwY = pGhost->_ScreenY;
     }
@@ -50,7 +55,7 @@ void ghostInitBobs(tGhost *pGhost)
 {
     bobNewInit(
         &pGhost->_Bob, 32, 32, 1,
-        g_pSprites32x, g_pSpriteMask32x, pGhost->_ScreenX, pGhost->_ScreenY);
+        g_pSprites32x, g_pSpriteMask32x, 330, 200);
     //bobNewSetBitMapOffset(&pWanderer->_Bob, pWanderer->_frameOffset * pWanderer->_currentFrame);
 }
 
@@ -59,6 +64,7 @@ void destroyGhost(tGhost *pGhost);
 void ghostReset(tGhost *pGhost)
 {
     pGhost->_currentZullStep =0;
+    pGhost->_respawnDelay = uwRandMinMax(50,100);
     switch (pGhost->_corner)
     {
     case 0:
