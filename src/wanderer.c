@@ -9,7 +9,7 @@ tWanderer *initWanderer(UBYTE personType)
 
     pWanderer = memAllocFastClear(sizeof(tWanderer));
     pWanderer->_frameOffset = 16;
-    pWanderer->_direction = 2;
+    pWanderer->_direction = 2;  
     pWanderer->_ScreenX = 8;
     pWanderer->_ScreenY = (personType ? 8 : 152);
     if (personType)

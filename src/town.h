@@ -8,6 +8,7 @@
 #include "tilemap.h"
 #include "wanderer.h"
 #include "player.h"
+#include "ghost.h"
 
 #define BT_HQ 0 //  Ghost HQ
 #define BT_SP 1 //  Shoppie
@@ -33,11 +34,11 @@
 
 #define BT_UNK 0xFF // reserved for random map generation.
 
-
 tTileMap g_pTownMap;
 
-tPlayer* g_pMainPlayer = NULL;
-tWanderer* g_pWanderers[2] = {NULL, NULL};
+tPlayer *g_pMainPlayer = NULL;
+tWanderer *g_pWanderers[2] = {NULL, NULL};
+tGhost *g_pGhosts[4] = {NULL, NULL, NULL, NULL};
 extern UBYTE g_buildings[40];
 
 #endif // _TOWNMAP_H_

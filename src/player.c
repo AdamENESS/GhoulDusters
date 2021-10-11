@@ -62,18 +62,12 @@ BYTE updatePlayer(tPlayer *pPlayer, BYTE joyX, BYTE joyY)
 			if (pPlayer->_locY > 160)
 				pPlayer->_locY = 0;
 		}
-		
+
 		pPlayer->_locModX = pPlayer->_locX >> 3;
 		pPlayer->_locModY = pPlayer->_locY >> 3;
 
 		pPlayer->_bobCarMap.sPos.uwX = pPlayer->_locX;
 		pPlayer->_bobCarMap.sPos.uwY = pPlayer->_locY;
-
-		// pPlayer->_bobCarTrail.sPos.uwX = pPlayer->_locModX << 3;
-		// pPlayer->_bobCarTrail.sPos.uwY = pPlayer->_locModY << 3;
-		// pPlayer->_bobCarTrail.sPos.uwX += 4;
-		// pPlayer->_bobCarTrail.sPos.uwY += 4;
-
 
 		pPlayer->ulFrameCounter = ulNow;
 	}

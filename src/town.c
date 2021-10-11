@@ -149,6 +149,14 @@ static void townGsCreate(void)
 	playerInitBobs(g_pMainPlayer);
 	wandererInitBobs(g_pWanderers[0]);
 	wandererInitBobs(g_pWanderers[1]);
+	for(int i=0; i<4; i++)
+	{
+		if (g_pGhosts[i] == NULL)
+		{
+			g_pGhosts[i] = initGhost(i);
+		}
+		ghostInitBobs(g_pGhosts[i]);
+	}
 	//initBuildings();
 	bobNewAllocateBgBuffers();
 
@@ -215,7 +223,10 @@ static void townGsLoop(void)
 
 	wandererProcess(g_pWanderers[0]);
 	wandererProcess(g_pWanderers[1]);
-
+	for (int i=0;i<4;i++)
+	{
+		ghostProcess(g_pGhosts[i]);
+	}
 	updatePlayer(g_pMainPlayer, bDirX, bDirY);
 
 	coreProcessAfterBobs();

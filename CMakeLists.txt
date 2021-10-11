@@ -67,7 +67,7 @@ set(TRANSPARENCY_HEX "#AAAAAA")
 file(
 	MAKE_DIRECTORY
 	${DATA_DIR} ${DATA_DIR}/sfx ${DATA_DIR}/intro ${DATA_DIR}/outro ${DATA_DIR}/sprites
-	${GEN_DIR}/game_bg ${GEN_DIR}/map ${GEN_DIR}/sprites/map  
+	${GEN_DIR}/game_bg ${GEN_DIR}/map ${GEN_DIR}/sprites/map   ${GEN_DIR}/sprites/ghosts  
 )
 
 # Palette
@@ -101,7 +101,15 @@ convertPalette(${GHOST_EXECUTABLE} ${RES_DIR}/maps/Ghostbusters.gpl ${PLT_PATH}/
 # 	DESTINATIONS
 # 		${DATA_DIR}/GB-Classic.bm
 # )
+convertBitmaps(
+	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
+	INTERLEAVED SOURCES
+		${RES_DIR}/bitmaps/GB-Classic.png
 
+	DESTINATIONS
+		${DATA_DIR}/GB-Classic.bm
+
+)
 set(MAPSPRITES "")
 foreach(i RANGE 6)
 	MATH(EXPR offsX "0 + ${i} * 16")
@@ -194,15 +202,7 @@ convertTileset(
 		SOURCE ${GEN_DIR}/maps DESTINATION ${GEN_DIR}/citytiles.png
 		TILES ${CITYTILES}
 	)
-convertBitmaps(
-	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
-	INTERLEAVED SOURCES
-		${RES_DIR}/bitmaps/GB-Classic.png
 
-	DESTINATIONS
-		${DATA_DIR}/GB-Classic.bm
-
-)
 convertBitmaps(
 	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl MASK_COLOR ${TRANSPARENCY_HEX}
 	INTERLEAVED SOURCES
@@ -213,6 +213,35 @@ convertBitmaps(
 	MASKS
 		${DATA_DIR}/maps/citytilesMasked.bm
 )
+
+
+set(GHOSTSPRITES "")
+foreach(i RANGE 29)
+MATH(EXPR offsX "0 + ${i} * 32")
+extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/spritesheet/ghosts-24x24.png
+DESTINATIONS
+${GEN_DIR}/sprites/ghosts/${i}.png  ${offsX}   0 32 32
+)
+list(APPEND GHOSTSPRITES "${i}.png")
+endforeach()
+
+convertTileset(
+		TARGET ${GHOST_EXECUTABLE} SIZE 32 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl 
+		SOURCE ${GEN_DIR}/sprites/ghosts DESTINATION ${GEN_DIR}/ghosts.png
+		TILES ${GHOSTSPRITES}
+	)
+
+convertBitmaps(
+	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl MASK_COLOR ${TRANSPARENCY_HEX}
+	INTERLEAVED SOURCES
+		
+		${GEN_DIR}/ghosts.png
+	DESTINATIONS
+		${DATA_DIR}/sprites/ghosts.bm
+	MASKS
+		${DATA_DIR}/sprites/ghosts_mask.bm
+)
+
 
 convertBitmaps(
 	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/bitmaps/GB-Modern.gpl
