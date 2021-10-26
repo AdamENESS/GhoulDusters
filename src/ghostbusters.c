@@ -6,7 +6,7 @@
 #include <ace/managers/key.h>
 #include <ace/managers/joy.h>
 #include <ace/managers/state.h>
-#include <ace/utils/ptplayer.h>
+
 #include <ace/managers/rand.h>
 #include "ghostbusters.h"
 

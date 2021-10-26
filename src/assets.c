@@ -1,5 +1,5 @@
 #include <ace/managers/memory.h>
-
+#include <ace/managers/system.h>
 #include "assets.h"
 
 tBitMap *g_pSprites16x;
@@ -13,12 +13,14 @@ UWORD *g_pModSamples;
 
 void loadMapAssets(void)
 {
+	//systemDisownBlitter();
 	g_pSprites16x = bitmapCreateFromFile("data/sprites/mapsprites.bm", 0);
 	g_pSpriteMask16x = bitmapCreateFromFile("data/sprites/mapsprites_masks.bm", 0);
 	g_pSprites32x = bitmapCreateFromFile("data/sprites/ghosts.bm", 0);
 	g_pSpriteMask32x = bitmapCreateFromFile("data/sprites/ghosts_mask.bm", 0);
 	g_pTiles = bitmapCreateFromFile("data/maps/citytiles.bm", 0);
 	g_pTilesMask = bitmapCreateFromFile("data/maps/citytilesMasked.bm", 0);
+//	systemOwnBlitter();
 }
 
 void destroyMapAssets(void)

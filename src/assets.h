@@ -1,6 +1,6 @@
 #ifndef _ASSETS_H_
 #define _ASSETS_H_
-#include <ace/utils/ptplayer.h>
+#include <ace/managers/ptplayer.h>
 #include <ace/utils/bitmap.h>
 
 // Gfx

@@ -4,5 +4,7 @@
 
 #ifndef _DRIVING_H_
 #define _DRIVING_H_
-
+#include "ghost.h"
+#include "player.h"
+#include "gamestate.h"
 #endif // _DRIVING_H_

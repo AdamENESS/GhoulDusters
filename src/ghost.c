@@ -7,7 +7,7 @@
 void ghostProcess(tGhost *pGhost)
 {
     ULONG ulNow = timerGet();
-    UBYTE isUpdate = timerGetDelta(pGhost->ulFrameCounter, ulNow) >= 10;
+    UBYTE isUpdate = timerGetDelta(pGhost->ulFrameCounter, ulNow) >= pGhost->_stepDelay;
     if (isUpdate)
     {
         pGhost->ulFrameCounter = ulNow;
@@ -21,7 +21,7 @@ void ghostProcess(tGhost *pGhost)
         }
         pGhost->_currentFrameStep += 1;
         pGhost->_currentZullStep += 1;
-        if (pGhost->_currentZullStep >= GHOST_ZULL_STEPS)
+        if (pGhost->_currentZullStep >= GHOST_ZULL_STEPS-1)
         {
             ghostReset(pGhost);
         }
@@ -47,6 +47,7 @@ tGhost *initGhost(UBYTE corner)
     pGhost = memAllocFastClear(sizeof(tGhost));
     pGhost->_corner = corner;
     pGhost->_frameOffset = 32;
+    pGhost->_stepDelay = 15;
     ghostReset(pGhost);
 
     return pGhost;

@@ -22,6 +22,7 @@ typedef struct _tGhost
     BYTE _currentFrameStep;
     BYTE _currentZullStep;
     BYTE _respawnDelay;
+    UBYTE _stepDelay;
 } tGhost;
 
 

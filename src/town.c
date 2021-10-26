@@ -12,24 +12,16 @@
 #include "maps/city16x.h"
 #include "bob_new.h"
 #include "assets.h"
+#include "gamestate.h"
+#include "ghostbusters.h"
 
 #define GAME_BPP 5
 
-static UWORD s_pPaletteRef[1 << GAME_BPP];
+//static UWORD s_pPaletteRef[1 << GAME_BPP];
 static UWORD *s_pColorBg;
-static tView *s_pView;
-static tVPort *s_pVpMain;
-tTileBufferManager *g_pMainBuffer;
+
 static UWORD s_uwDistanceTravelled;
 // Sprites
-
-UBYTE g_buildings[40] = {
-						BT_1S, BT_2S, BT_3S, BT_1S, BT_2S, BT_SP, BT_2S, BT_1S, 
-						BT_3S, BT_1S, BT_2S, BT_3S, BT_1S, BT_2S, BT_3S, BT_1S,
-						BT_1S, BT_3S, BT_3S, BT_1S, BT_ZL, BT_3S, BT_2S, BT_1S,
-						BT_2S, BT_2S, BT_1S, BT_2S, BT_3S, BT_1S, BT_3S, BT_2S,
-						BT_1S, BT_2S, BT_HQ, BT_1S, BT_2S, BT_3S, BT_2S, BT_1S};
-
 
 void setMapBuilding(tTileBufferManager* pMapBuffer, UBYTE building, UBYTE status)
 {
@@ -39,6 +31,7 @@ void setMapBuilding(tTileBufferManager* pMapBuffer, UBYTE building, UBYTE status
 	UBYTE x=0,y=0;
 	g_pMainBuffer->pTileData[x][y] = g_pTownMap._mapDataBase[x][y] + (status *39);
 }
+
 void coreProcessBeforeBobs(void)
 {
 	//	timerOnInterrupt();
@@ -77,9 +70,9 @@ void coreProcessAfterBobs(void)
 	// Update HUD state machine and draw stuff
 	//hudUpdate();
 
-	viewProcessManagers(s_pView);
+	viewProcessManagers(g_pView);
 	copProcessBlocks();
-	vPortWaitForEnd(s_pVpMain);
+	vPortWaitForEnd(g_pVpMain);
 }
 
 void initBuildings(void)
@@ -91,18 +84,18 @@ static void townGsCreate(void)
 {
 	logBlockBegin("townGsCreate()");
 
-	s_pView = viewCreate(0,
+	g_pView = viewCreate(0,
 						 TAG_VIEW_GLOBAL_CLUT, 1,
 						 TAG_END);
 
-	s_pVpMain = vPortCreate(0,
-							TAG_VPORT_VIEW, s_pView,
+	g_pVpMain = vPortCreate(0,
+							TAG_VPORT_VIEW, g_pView,
 							TAG_VPORT_WIDTH, 320,
 							TAG_VPORT_HEIGHT, 176,
 							TAG_VPORT_BPP, GAME_BPP,
 							TAG_END);
 	g_pMainBuffer = tileBufferCreate(0,
-									 TAG_TILEBUFFER_VPORT, s_pVpMain,
+									 TAG_TILEBUFFER_VPORT, g_pVpMain,
 									 TAG_TILEBUFFER_BITMAP_FLAGS, BMF_CLEAR | BMF_INTERLEAVED,
 									 TAG_TILEBUFFER_BOUND_TILE_X, CITY16X_WIDTH,
 									 TAG_TILEBUFFER_BOUND_TILE_Y, CITY16X_HEIGHT,
@@ -111,11 +104,14 @@ static void townGsCreate(void)
 									 TAG_TILEBUFFER_REDRAW_QUEUE_LENGTH, 10,
 									 TAG_TILEBUFFER_TILESET, g_pTiles,
 									 TAG_END);
+	systemReleaseBlitterToOs();
+	paletteLoad("data/maps/GB-Game.plt", g_pVpMain->pPalette, 1 << GAME_BPP);
+	for(int p=0; p<32; p++)
+		s_pPaletteRef[p] = g_pVpMain->pPalette[p];
 
-	paletteLoad("data/maps/GB-Game.plt", s_pVpMain->pPalette, 1 << GAME_BPP);
-	//memset(s_pVpMain->pPalette, 0, 1 << GAME_BPP);
-
-	s_pColorBg = &s_pVpMain->pPalette[1];
+	//memset(g_pVpMain->pPalette, 0, 1 << GAME_BPP);
+	systemGetBlitterFromOs();
+	s_pColorBg = &g_pVpMain->pPalette[1];
 
 	// Load the town map in.
 	//   mapDataInitFromFile(&g_pTownMap, "data/maps/city8x.json");
@@ -166,7 +162,7 @@ static void townGsCreate(void)
 	// Initial background
 	tileBufferRedrawAll(g_pMainBuffer);
 	// Load the view
-	viewLoad(s_pView);
+	viewLoad(g_pView);
 	logBlockEnd("townGsCreate()");
 }
 
@@ -175,8 +171,9 @@ void handleInput(BYTE *bDirX, BYTE *bDirY)
 	if (joyCheck(JOY1_FIRE))
 	{
 		s_uwDistanceTravelled = 0;
-		tileBufferRedrawAll(g_pMainBuffer);
-		bobNewDiscardUndraw();
+		//tileBufferRedrawAll(g_pMainBuffer);
+		//bobNewDiscardUndraw();
+		statePush(g_pStateMachineGame, &g_sStateGameDrive);
 	}
 	if (keyCheck(KEY_D))
 	{
@@ -231,8 +228,8 @@ static void townGsLoop(void)
 
 	coreProcessAfterBobs();
 
-	//vPortWaitForEnd(s_pVpMain);
-	//viewUpdateCLUT(s_pView);
+	//vPortWaitForEnd(g_pVpMain);
+	//viewUpdateCLUT(g_pView);
 }
 
 static void townGsDestroy(void)
@@ -240,7 +237,7 @@ static void townGsDestroy(void)
 	logBlockBegin("townGsDestroy()");
 	systemUse();
 
-	viewDestroy(s_pView);
+	viewDestroy(g_pView);
 	logBlockEnd("townGsDestroy()");
 }
 

@@ -10,7 +10,7 @@
 #include <ace/managers/key.h>
 #include <ace/managers/blit.h>
 #include <ace/utils/palette.h>
-#include <ace/utils/ptplayer.h>
+
 //#include "menu.h"
 #include "fade.h"
 #include "ghostbusters.h"
@@ -40,6 +40,7 @@ static void logoGsCreate(void) {
 
 	s_pView = viewCreate(0,
 		TAG_VIEW_GLOBAL_CLUT, 1,
+		TAG_VIEW_WINDOW_HEIGHT, 200,
 	TAG_END);
 
 	s_pVp = vPortCreate(0,
@@ -126,11 +127,13 @@ static void logoGsDestroy(void) {
 
 void lmcFadeIn(void) {
 	if(s_ubFadeoutCnt == 0) {
-		systemUse();
+		//systemUse();
+		systemReleaseBlitterToOs();
 		paletteLoad("data/maps/GB-Game.plt", s_pPaletteRef, 1 << s_pVp->ubBPP);
 		tBitMap *pLogo = bitmapCreateFromFile("data/GB-classic.bm", 0);
 		//s_pSfxLmc = ptplayerSfxCreateFromFile("data/sfx/lmc.sfx");
-		systemUnuse();
+		systemGetBlitterFromOs();
+		//systemUnuse();
 
 		blitCopy(
 			pLogo, 0, 0, s_pBfr->pBack,

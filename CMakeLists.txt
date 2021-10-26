@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 3.14.0)
 project(Ghostbusters LANGUAGES C)
-
 set(CMAKE_C_STANDARD 11)
 #file(GLOB_RECURSE SOURCES src/c2p/*.c src/res/*.c src/misc/*.c include/*.h)
 file(GLOB_RECURSE SOURCES src/*.c src/*.h)
@@ -252,13 +251,13 @@ convertBitmaps(
 		
 )
 
-mergeMods(
-	TARGET ${GHOST_EXECUTABLE}
-	SOURCES ${RES_DIR}/music/ghostbusters_.mod 
-	DESTINATIONS ${DATA_DIR}/ghostbusters.mod
+# mergeMods(
+# 	TARGET ${GHOST_EXECUTABLE}
+# 	SOURCES ${RES_DIR}/music/ghostbusters_.mod 
+# 	DESTINATIONS ${DATA_DIR}/ghostbusters.mod
 
-	SAMPLE_PACK ${DATA_DIR}/samples.samplepack
-)
+# 	SAMPLE_PACK ${DATA_DIR}/samples.samplepack
+# )
 
 convertFont(
 	TARGET ${GHOST_EXECUTABLE} FIRST_CHAR 32
