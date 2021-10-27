@@ -16,7 +16,7 @@ void ghostProcess(tGhost *pGhost)
             pGhost->_respawnDelay--;
             pGhost->_Bob.sPos.uwX = 330;
             pGhost->_Bob.sPos.uwY = 210;
-            bobNewPush(&pGhost->_Bob);
+            //bobNewPush(&pGhost->_Bob);
             return;
         }
         pGhost->_currentFrameStep += 1;

@@ -14,7 +14,22 @@
 #include "assets.h"
 #include "gamestate.h"
 #include "ghostbusters.h"
+#include "fade.h"
+typedef void (*tCbLogo)(void);
+typedef UBYTE (*tCbFadeOut)(void);
 
+void townFadeIn(void);
+void townWait(void);
+UBYTE townFadeOut(void);
+
+static UBYTE s_ubFrame = 0;
+static tFadeState s_eFadeState;
+
+static UBYTE s_ubFadeoutCnt;
+static tCbLogo s_cbFadeIn = 0, s_cbWait = 0;
+static tCbFadeOut s_cbFadeOut = 0;
+static UBYTE s_isAnyPressed = 0;
+static UBYTE s_isEntryFade = 1;
 #define GAME_BPP 5
 
 //static UWORD s_pPaletteRef[1 << GAME_BPP];
@@ -23,19 +38,19 @@ static UWORD *s_pColorBg;
 static UWORD s_uwDistanceTravelled;
 // Sprites
 
-void setMapBuilding(tTileBufferManager* pMapBuffer, UBYTE building, UBYTE status)
+void setMapBuilding(tTileBufferManager *pMapBuffer, UBYTE building, UBYTE status)
 {
 	UBYTE bRow = status >> 3;
 	UBYTE bCol = status - (bRow << 3);
-	
-	UBYTE x=0,y=0;
-	g_pMainBuffer->pTileData[x][y] = g_pTownMap._mapDataBase[x][y] + (status *39);
+
+	UBYTE x = 0, y = 0;
+	g_pMainBuffer->pTileData[x][y] = g_pTownMap._mapDataBase[x][y] + (status * 39);
 }
 
 void coreProcessBeforeBobs(void)
 {
 	//	timerOnInterrupt();
-	bobNewBegin();
+
 	// Draw pending tiles
 	tileBufferQueueProcess(g_pMainBuffer);
 	static UWORD lastX = 0xFFFF;
@@ -52,8 +67,8 @@ void coreProcessBeforeBobs(void)
 		lastY = y;
 
 		static UWORD t = 0;
-		setMapBuilding(g_pMainBuffer,1, 2);
-		
+		//setMapBuilding(g_pMainBuffer, 1, 2);
+
 		t++;
 		if (t > 2)
 			t = 0;
@@ -106,7 +121,7 @@ static void townGsCreate(void)
 									 TAG_END);
 	systemReleaseBlitterToOs();
 	paletteLoad("data/maps/GB-Game.plt", g_pVpMain->pPalette, 1 << GAME_BPP);
-	for(int p=0; p<32; p++)
+	for (int p = 0; p < 32; p++)
 		s_pPaletteRef[p] = g_pVpMain->pPalette[p];
 
 	//memset(g_pVpMain->pPalette, 0, 1 << GAME_BPP);
@@ -145,7 +160,7 @@ static void townGsCreate(void)
 	playerInitBobs(g_pMainPlayer);
 	wandererInitBobs(g_pWanderers[0]);
 	wandererInitBobs(g_pWanderers[1]);
-	for(int i=0; i<4; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		if (g_pGhosts[i] == NULL)
 		{
@@ -157,12 +172,21 @@ static void townGsCreate(void)
 	bobNewAllocateBgBuffers();
 
 	systemUnuse();
-
+	paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, (15 * s_ubFadeoutCnt) / 50);
+	vPortWaitForEnd(g_pVpMain);
+	viewUpdateCLUT(g_pView);
 	g_pMainBuffer->pCamera->uPos.uwX = 0;
 	// Initial background
 	tileBufferRedrawAll(g_pMainBuffer);
 	// Load the view
 	viewLoad(g_pView);
+	s_ubFadeoutCnt = 0;
+	s_eFadeState = FADE_STATE_IN;
+
+	s_cbFadeIn = townFadeIn;
+	s_cbFadeOut = townFadeOut;
+	s_cbWait = townWait;
+
 	logBlockEnd("townGsCreate()");
 }
 
@@ -173,7 +197,8 @@ void handleInput(BYTE *bDirX, BYTE *bDirY)
 		s_uwDistanceTravelled = 0;
 		//tileBufferRedrawAll(g_pMainBuffer);
 		//bobNewDiscardUndraw();
-		statePush(g_pStateMachineGame, &g_sStateGameDrive);
+		//statePush(g_pStateMachineGame, &g_sStateGameDrive);
+		s_eFadeState = FADE_STATE_OUT;
 	}
 	if (keyCheck(KEY_D))
 	{
@@ -209,22 +234,84 @@ void handleInput(BYTE *bDirX, BYTE *bDirY)
 		*bDirY -= 1;
 	}
 }
+void fadeLoop(void)
+{
+	if (s_eFadeState == FADE_STATE_IN)
+	{
+		if (s_ubFadeoutCnt >= 50)
+		{
+			s_eFadeState = FADE_STATE_IDLE;
+			s_ubFrame = 0;
+		}
+		else
+		{
+			if (s_cbFadeIn)
+			{
+				s_cbFadeIn();
+			}
+			++s_ubFadeoutCnt;
+			paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, (15 * s_ubFadeoutCnt) / 50);
+		}
+	}
+	else if (s_eFadeState == FADE_STATE_IDLE)
+	{
+		if (s_cbWait)
+		{
+			s_cbWait();
+		}
+	}
+	else if (s_eFadeState == FADE_STATE_OUT)
+	{
+		if (s_ubFadeoutCnt == 0)
+		{
+			if (s_cbFadeOut && s_cbFadeOut())
+			{
+				return;
+			}
+			else
+			{
+				s_eFadeState = FADE_STATE_IN;
+			}
+		}
+		else
+		{
+			--s_ubFadeoutCnt;
+			paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, 15 * s_ubFadeoutCnt / 50);
+		}
+	}
 
+	vPortWaitForEnd(g_pVpMain);
+	viewUpdateCLUT(g_pView);
+}
 static void townGsLoop(void)
 {
 
 	BYTE bDirX = 0, bDirY = 0;
-	handleInput(&bDirX, &bDirY);
 
+	fadeLoop();
+	bobNewBegin();
 	coreProcessBeforeBobs();
-
-	wandererProcess(g_pWanderers[0]);
-	wandererProcess(g_pWanderers[1]);
-	for (int i=0;i<4;i++)
+	if (s_eFadeState == FADE_STATE_IDLE)
 	{
-		ghostProcess(g_pGhosts[i]);
+		handleInput(&bDirX, &bDirY);
+		wandererProcess(g_pWanderers[0]);
+		wandererProcess(g_pWanderers[1]);
+		for (int i = 0; i < 4; i++)
+		{
+			ghostProcess(g_pGhosts[i]);
+		}
+		updatePlayer(g_pMainPlayer, bDirX, bDirY);
 	}
-	updatePlayer(g_pMainPlayer, bDirX, bDirY);
+	else
+	{
+		bobNewPush(&g_pMainPlayer->_bobCarMap);
+		bobNewPush(&g_pWanderers[0]->_Bob);
+		bobNewPush(&g_pWanderers[1]->_Bob);
+		for (int i = 0; i < 4; i++)
+		{
+			bobNewPush(&g_pGhosts[i]->_Bob);
+		}
+	}
 
 	coreProcessAfterBobs();
 
@@ -241,5 +328,50 @@ static void townGsDestroy(void)
 	logBlockEnd("townGsDestroy()");
 }
 
+void townFadeIn(void)
+{
+}
+
+void townWait(void)
+{
+	++s_ubFrame;
+	if (s_eFadeState == FADE_STATE_IDLE)
+	{
+		if (s_isAnyPressed)
+		{
+			s_ubFadeoutCnt = 50;
+			s_eFadeState = FADE_STATE_OUT;
+		}
+	}
+	// else if(s_ubFrame == 1){
+	// 	//ptplayerSfxPlay(s_pSfxLmc, -1, PTPLAYER_VOLUME_MAX, 1);
+	// 	// s_eFadeState = FADE_STATE_OUT; // FOR DEBUGGING SFX GLITCHES
+	// }
+}
+
+UBYTE townFadeOut(void)
+{
+	//ptplayerWaitForSfx();
+	//ptplayerSfxDestroy(s_pSfxdrive);
+	statePush(g_pStateMachineGame, &g_sStateGameDrive);
+	return 1;
+}
+
+void townResume(void)
+{
+
+	s_ubFadeoutCnt = 0;
+	s_eFadeState = FADE_STATE_IN;
+	UBYTE **pTiles = g_pMainBuffer->pTileData;
+	//int y=0;
+	for (int y = 0; y < g_pTownMap._height; y++)
+	{
+		for (int x = 0; x < g_pTownMap._width; x++)
+		{
+			pTiles[x][y] = mapDataGetTile(&g_pTownMap, x, y);
+		}
+	}
+	tileBufferRedrawAll(g_pMainBuffer);
+}
 tState g_sStateGameTown = {
-	.cbCreate = townGsCreate, .cbLoop = townGsLoop, .cbDestroy = townGsDestroy};
+	.cbCreate = townGsCreate, .cbLoop = townGsLoop, .cbDestroy = townGsDestroy, .cbResume = townResume};
