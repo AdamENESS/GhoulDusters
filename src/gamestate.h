@@ -59,7 +59,9 @@ typedef struct _tGameStats
 
 extern tView *g_pView;
 extern tVPort *g_pVpMain;
+extern tVPort *g_pVpHUD;
 extern tTileBufferManager *g_pMainBuffer;
+extern tSimpleBufferManager *g_pHudBuffer;
 extern UWORD s_pPaletteRef[32];
 void ResetGameStats(void);
 

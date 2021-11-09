@@ -46,9 +46,10 @@ static void driveGsCreate(void)
 	{
 		for (int x = 0; x < g_pTownMap._width; x++)
 		{
-			pTiles[x][y] = 0x02;
+			pTiles[x][y] = 120;
 		}
 	}
+	
 	tileBufferRedrawAll(g_pMainBuffer);
 }
 
@@ -58,7 +59,7 @@ bobNewBegin();
 	s_isAnyPressed = (keyUse(KEY_RETURN) | keyUse(KEY_ESCAPE) | keyUse(KEY_SPACE) |
 					  keyUse(KEY_LSHIFT) | keyUse(KEY_RSHIFT) |
 					  joyUse(JOY1 + JOY_FIRE) | joyUse(JOY2 + JOY_FIRE));
-	if (s_eFadeState == FADE_STATE_IN)
+	if (s_eFadeState == FADE_STATE_IN) 
 	{
 		if (s_ubFadeoutCnt >= 50)
 		{

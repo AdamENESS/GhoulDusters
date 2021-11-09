@@ -15,6 +15,8 @@
 #include "gamestate.h"
 #include "ghostbusters.h"
 #include "fade.h"
+#include "hud.h"
+
 typedef void (*tCbLogo)(void);
 typedef UBYTE (*tCbFadeOut)(void);
 
@@ -109,16 +111,20 @@ static void townGsCreate(void)
 							TAG_VPORT_HEIGHT, 176,
 							TAG_VPORT_BPP, GAME_BPP,
 							TAG_END);
+
 	g_pMainBuffer = tileBufferCreate(0,
 									 TAG_TILEBUFFER_VPORT, g_pVpMain,
 									 TAG_TILEBUFFER_BITMAP_FLAGS, BMF_CLEAR | BMF_INTERLEAVED,
 									 TAG_TILEBUFFER_BOUND_TILE_X, CITY16X_WIDTH,
-									 TAG_TILEBUFFER_BOUND_TILE_Y, CITY16X_HEIGHT,
+									 TAG_TILEBUFFER_BOUND_TILE_Y, CITY16X_HEIGHT + 4, // two extra tiles above and below for town.
 									 TAG_TILEBUFFER_IS_DBLBUF, 1,
 									 TAG_TILEBUFFER_TILE_SHIFT, 4,
 									 TAG_TILEBUFFER_REDRAW_QUEUE_LENGTH, 10,
 									 TAG_TILEBUFFER_TILESET, g_pTiles,
 									 TAG_END);
+
+
+	hudCreate(g_pView, NULL);
 	systemReleaseBlitterToOs();
 	paletteLoad("data/maps/GB-Game.plt", g_pVpMain->pPalette, 1 << GAME_BPP);
 	for (int p = 0; p < 32; p++)

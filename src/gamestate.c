@@ -13,7 +13,9 @@ tMarshMan *g_pMarshMellowMan = NULL;
 
 tView *g_pView = NULL;
 tVPort *g_pVpMain = NULL;
+tVPort *g_pVpHUD = NULL;
 tTileBufferManager *g_pMainBuffer = NULL;
+tSimpleBufferManager *g_pHudBuffer = NULL;
 UWORD s_pPaletteRef[32];
 
 UBYTE g_bBuildings[40] = {

@@ -196,6 +196,26 @@ ${GEN_DIR}/maps/${file}.png  ${offsX}   32 16 16
 list(APPEND CITYTILES "${file}.png")
 endforeach()
 
+foreach(i RANGE 38)
+MATH(EXPR offsX "0 + ${i} * 16")
+MATH(EXPR file "117 + ${i}")
+extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/maps/City-Sheet.png
+DESTINATIONS
+${GEN_DIR}/maps/${file}.png  ${offsX}   48 16 16
+)
+list(APPEND CITYTILES "${file}.png")
+endforeach()
+
+foreach(i RANGE 38)
+MATH(EXPR offsX "0 + ${i} * 16")
+MATH(EXPR file "156 + ${i}")
+extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/maps/City-Sheet.png
+DESTINATIONS
+${GEN_DIR}/maps/${file}.png  ${offsX}   64 16 16
+)
+list(APPEND CITYTILES "${file}.png")
+endforeach()
+
 convertTileset(
 		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl 
 		SOURCE ${GEN_DIR}/maps DESTINATION ${GEN_DIR}/citytiles.png

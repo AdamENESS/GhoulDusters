@@ -124,26 +124,28 @@ static void logoGsDestroy(void) {
 
 #define LOGO_WIDTH 320
 #define LOGO_HEIGHT 200
-
-void lmcFadeIn(void) {
-	if(s_ubFadeoutCnt == 0) {
-		//systemUse();
+void LoadLogo(void) {
+	
 		systemReleaseBlitterToOs();
 		paletteLoad("data/maps/GB-Game.plt", s_pPaletteRef, 1 << s_pVp->ubBPP);
 		tBitMap *pLogo = bitmapCreateFromFile("data/GB-classic.bm", 0);
-		//s_pSfxLmc = ptplayerSfxCreateFromFile("data/sfx/lmc.sfx");
+		
 		systemGetBlitterFromOs();
-		//systemUnuse();
-
+		
 		blitCopy(
 			pLogo, 0, 0, s_pBfr->pBack,
 			(s_pVp->uwWidth - LOGO_WIDTH) / 2, (s_pVp->uwHeight - LOGO_HEIGHT) / 2,
 			LOGO_WIDTH, LOGO_HEIGHT, MINTERM_COOKIE
 		);
 
-		systemUse();
 		bitmapDestroy(pLogo);
-		systemUnuse();
+
+}
+
+void lmcFadeIn(void) {
+	if(s_ubFadeoutCnt == 0) {
+		//systemUnuse();
+		LoadLogo();
 	}
 	else if(s_isAnyPressed) {
 		s_eFadeState = FADE_STATE_OUT;
