@@ -55,25 +55,28 @@ void coreProcessBeforeBobs(void)
 
 	// Draw pending tiles
 	tileBufferQueueProcess(g_pMainBuffer);
-	static UWORD lastX = 0xFFFF;
-	static UWORD lastY = 0xFFFF;
-	// blit any map dots.
-	UWORD x = (g_pMainPlayer->_locModX << 3) + 4; //pulRandMinMax(0,19) * 16;
-	UWORD y = (g_pMainPlayer->_locModY << 3) + 4; //ulRandMinMax(0,10) * 16;
-	blitCopyMask(g_pSprites16x, 0, 16 * 17, g_pMainBuffer->pScroll->pBack, x, y, 16, 16, (UWORD *)g_pSpriteMask16x->Planes[0]);
-	//blitCopyMask(g_pSprites16x, 0, 16 * 17, g_pMainBuffer->pScroll->pFront, x, y, 16, 16, (UWORD *)g_pSpriteMask16x->Planes[0]);
-	if (x != lastX || y != lastY)
+	if (s_eFadeState == FADE_STATE_IDLE)
 	{
-		s_uwDistanceTravelled++;
-		lastX = x;
-		lastY = y;
+		static UWORD lastX = 0xFFFF;
+		static UWORD lastY = 0xFFFF;
+		// blit any map dots.
+		UWORD x = (g_pMainPlayer->_locModX << 3) + 4; //pulRandMinMax(0,19) * 16;
+		UWORD y = (g_pMainPlayer->_locModY << 3) + 4; //ulRandMinMax(0,10) * 16;
+		blitCopyMask(g_pSprites16x, 0, 16 * 17, g_pMainBuffer->pScroll->pBack, x, y, 16, 16, (UWORD *)g_pSpriteMask16x->Planes[0]);
+		//blitCopyMask(g_pSprites16x, 0, 16 * 17, g_pMainBuffer->pScroll->pFront, x, y, 16, 16, (UWORD *)g_pSpriteMask16x->Planes[0]);
+		if (x != lastX || y != lastY)
+		{
+			s_uwDistanceTravelled++;
+			lastX = x;
+			lastY = y;
 
-		static UWORD t = 0;
-		//setMapBuilding(g_pMainBuffer, 1, 2);
+			static UWORD t = 0;
+			//setMapBuilding(g_pMainBuffer, 1, 2);
 
-		t++;
-		if (t > 2)
-			t = 0;
+			t++;
+			if (t > 2)
+				t = 0;
+		}
 	}
 }
 
@@ -122,7 +125,6 @@ static void townGsCreate(void)
 									 TAG_TILEBUFFER_REDRAW_QUEUE_LENGTH, 10,
 									 TAG_TILEBUFFER_TILESET, g_pTiles,
 									 TAG_END);
-
 
 	hudCreate(g_pView, NULL);
 	systemReleaseBlitterToOs();
@@ -178,7 +180,7 @@ static void townGsCreate(void)
 	bobNewAllocateBgBuffers();
 
 	systemUnuse();
-	paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, (15 * s_ubFadeoutCnt) / 50);
+	paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, (15 * s_ubFadeoutCnt) / 20);
 	vPortWaitForEnd(g_pVpMain);
 	viewUpdateCLUT(g_pView);
 	g_pMainBuffer->pCamera->uPos.uwX = 0;
@@ -244,7 +246,7 @@ void fadeLoop(void)
 {
 	if (s_eFadeState == FADE_STATE_IN)
 	{
-		if (s_ubFadeoutCnt >= 50)
+		if (s_ubFadeoutCnt >= 20)
 		{
 			s_eFadeState = FADE_STATE_IDLE;
 			s_ubFrame = 0;
@@ -256,7 +258,7 @@ void fadeLoop(void)
 				s_cbFadeIn();
 			}
 			++s_ubFadeoutCnt;
-			paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, (15 * s_ubFadeoutCnt) / 50);
+			paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, (15 * s_ubFadeoutCnt) / 20);
 		}
 	}
 	else if (s_eFadeState == FADE_STATE_IDLE)
@@ -282,7 +284,7 @@ void fadeLoop(void)
 		else
 		{
 			--s_ubFadeoutCnt;
-			paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, 15 * s_ubFadeoutCnt / 50);
+			paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, 15 * s_ubFadeoutCnt / 20);
 		}
 	}
 
@@ -345,7 +347,7 @@ void townWait(void)
 	{
 		if (s_isAnyPressed)
 		{
-			s_ubFadeoutCnt = 50;
+			s_ubFadeoutCnt = 20;
 			s_eFadeState = FADE_STATE_OUT;
 		}
 	}

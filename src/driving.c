@@ -61,7 +61,7 @@ bobNewBegin();
 					  joyUse(JOY1 + JOY_FIRE) | joyUse(JOY2 + JOY_FIRE));
 	if (s_eFadeState == FADE_STATE_IN) 
 	{
-		if (s_ubFadeoutCnt >= 50)
+		if (s_ubFadeoutCnt >= 20)
 		{
 			s_eFadeState = FADE_STATE_IDLE;
 			s_ubFrame = 0;
@@ -73,7 +73,7 @@ bobNewBegin();
 				s_cbFadeIn();
 			}
 			++s_ubFadeoutCnt;
-			paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, (15 * s_ubFadeoutCnt) / 50);
+			paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, (15 * s_ubFadeoutCnt) / 20);
 		}
 	}
 	else if (s_eFadeState == FADE_STATE_IDLE)
@@ -99,7 +99,7 @@ bobNewBegin();
 		else
 		{
 			--s_ubFadeoutCnt;
-			paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, 15 * s_ubFadeoutCnt / 50);
+			paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, 15 * s_ubFadeoutCnt / 20);
 		}
 	}
 
@@ -132,7 +132,7 @@ void driveWait(void)
 	{
 		if (s_isAnyPressed)
 		{
-			s_ubFadeoutCnt = 50;
+			s_ubFadeoutCnt = 20;
 			s_eFadeState = FADE_STATE_OUT;
 		}
 	}
