@@ -29,8 +29,8 @@ static UBYTE s_ubFadeoutCnt;
 static tCbLogo s_cbFadeIn = 0, s_cbWait = 0;
 static tCbFadeOut s_cbFadeOut = 0;
 static UBYTE s_isAnyPressed = 0;
-static UBYTE s_isEntryFade = 1;
 
+static BYTE s_bSpeedMod = 0;
 static void driveGsCreate(void)
 {
 	s_ubFadeoutCnt = 0;
@@ -42,13 +42,22 @@ static void driveGsCreate(void)
 	bobNewDiscardUndraw();
 	UBYTE **pTiles = g_pMainBuffer->pTileData;
 	//int y=0;
-	for (int y = 0; y < g_pTownMap._height; y++)
+	for (int y = 0; y < 24; y++)
 	{
 		for (int x = 0; x < g_pTownMap._width; x++)
 		{
-			pTiles[x][y] = 120;
+			if (x < 2 || x > 17)
+			{
+				pTiles[x][y] = 243; // black
+			}
+			else
+			{
+				pTiles[x][y] = 117 + ROAD_layer[(y)*16 + x-2]; // Road plus offset into tilemap.
+			}
 		}
 	}
+
+//	g_pMainBuffer->pCamera->uPos.uwY -=2;
 	
 	tileBufferRedrawAll(g_pMainBuffer);
 }
@@ -115,10 +124,20 @@ bobNewBegin();
 	viewProcessManagers(g_pView);
 	copProcessBlocks();
 	vPortWaitForEnd(g_pVpMain);
+
+	g_pMainBuffer->pCamera->uPos.uwY -=s_bSpeedMod;
+
+	s_bSpeedMod -=1;
+	if (s_bSpeedMod < -4)
+	
+	{
+		s_bSpeedMod = -4;
+	}
 }
 
 static void driveGsDestroy(void)
 {
+	g_pMainBuffer->pCamera->uPos.uwY=0;
 }
 
 void driveFadeIn(void)

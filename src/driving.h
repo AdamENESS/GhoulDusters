@@ -7,4 +7,5 @@
 #include "ghost.h"
 #include "player.h"
 #include "gamestate.h"
+#include "maps/road.h"
 #endif // _DRIVING_H_

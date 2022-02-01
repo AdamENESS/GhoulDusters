@@ -196,25 +196,42 @@ ${GEN_DIR}/maps/${file}.png  ${offsX}   32 16 16
 list(APPEND CITYTILES "${file}.png")
 endforeach()
 
-foreach(i RANGE 38)
-MATH(EXPR offsX "0 + ${i} * 16")
-MATH(EXPR file "117 + ${i}")
-extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/maps/City-Sheet.png
-DESTINATIONS
-${GEN_DIR}/maps/${file}.png  ${offsX}   48 16 16
-)
-list(APPEND CITYTILES "${file}.png")
-endforeach()
+foreach(y RANGE 10)
+MATH(EXPR offnY "0 + ${y} * 12")
+MATH(EXPR offsY "0 + ${y} * 16")
+foreach(i RANGE 11)
 
-foreach(i RANGE 38)
 MATH(EXPR offsX "0 + ${i} * 16")
-MATH(EXPR file "156 + ${i}")
-extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/maps/City-Sheet.png
+
+MATH(EXPR file "117 + ${offnY} + ${i}")
+extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/maps/road.png
 DESTINATIONS
-${GEN_DIR}/maps/${file}.png  ${offsX}   64 16 16
+${GEN_DIR}/maps/${file}.png ${offsX} ${offsY} 16 16
 )
 list(APPEND CITYTILES "${file}.png")
-endforeach()
+endforeach(i RANGE 12)
+	
+endforeach(y RANGE 11)
+
+# foreach(i RANGE 38)
+# MATH(EXPR offsX "0 + ${i} * 16")
+# MATH(EXPR file "117 + ${i}")
+# extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/maps/City-Sheet.png
+# DESTINATIONS
+# ${GEN_DIR}/maps/${file}.png  ${offsX}   48 16 16
+# )
+# list(APPEND CITYTILES "${file}.png")
+# endforeach()
+
+# foreach(i RANGE 38)
+# MATH(EXPR offsX "0 + ${i} * 16")
+# MATH(EXPR file "156 + ${i}")
+# extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/maps/City-Sheet.png
+# DESTINATIONS
+# ${GEN_DIR}/maps/${file}.png  ${offsX}   64 16 16
+# )
+# list(APPEND CITYTILES "${file}.png")
+# endforeach()
 
 convertTileset(
 		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl 

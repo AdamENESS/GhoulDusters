@@ -119,10 +119,10 @@ static void townGsCreate(void)
 									 TAG_TILEBUFFER_VPORT, g_pVpMain,
 									 TAG_TILEBUFFER_BITMAP_FLAGS, BMF_CLEAR | BMF_INTERLEAVED,
 									 TAG_TILEBUFFER_BOUND_TILE_X, CITY16X_WIDTH,
-									 TAG_TILEBUFFER_BOUND_TILE_Y, CITY16X_HEIGHT + 4, // two extra tiles above and below for town.
+									 TAG_TILEBUFFER_BOUND_TILE_Y, 24, // two extra tiles above and below for town.
 									 TAG_TILEBUFFER_IS_DBLBUF, 1,
 									 TAG_TILEBUFFER_TILE_SHIFT, 4,
-									 TAG_TILEBUFFER_REDRAW_QUEUE_LENGTH, 10,
+									 TAG_TILEBUFFER_REDRAW_QUEUE_LENGTH, 24,
 									 TAG_TILEBUFFER_TILESET, g_pTiles,
 									 TAG_END);
 
@@ -165,9 +165,11 @@ static void townGsCreate(void)
 		g_pWanderers[0] = initWanderer(0);
 		g_pWanderers[1] = initWanderer(1);
 	}
+	
 	playerInitBobs(g_pMainPlayer);
 	wandererInitBobs(g_pWanderers[0]);
 	wandererInitBobs(g_pWanderers[1]);
+	
 	for (int i = 0; i < 4; i++)
 	{
 		if (g_pGhosts[i] == NULL)

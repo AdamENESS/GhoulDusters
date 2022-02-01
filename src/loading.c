@@ -70,11 +70,12 @@ static void logoGsCreate(void) {
 }
 
 static void logoGsLoop(void) {
-	s_isAnyPressed = (
-		keyUse(KEY_RETURN) | keyUse(KEY_ESCAPE) | keyUse(KEY_SPACE) |
-		keyUse(KEY_LSHIFT) | keyUse(KEY_RSHIFT) |
-		joyUse(JOY1 + JOY_FIRE) | joyUse(JOY2 + JOY_FIRE)
-	);
+	// s_isAnyPressed = (
+	// 	keyUse(KEY_RETURN) | keyUse(KEY_ESCAPE) | keyUse(KEY_SPACE) |
+	// 	keyUse(KEY_LSHIFT) | keyUse(KEY_RSHIFT) |
+	// 	joyUse(JOY1 + JOY_FIRE) | joyUse(JOY2 + JOY_FIRE)
+	// );
+	s_isAnyPressed = FALSE;
 	if(s_eFadeState == FADE_STATE_IN) {
 		if(s_ubFadeoutCnt >= 50) {
 			s_eFadeState = FADE_STATE_IDLE;
