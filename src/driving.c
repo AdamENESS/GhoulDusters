@@ -127,11 +127,10 @@ bobNewBegin();
 
 	g_pMainBuffer->pCamera->uPos.uwY -=s_bSpeedMod;
 
-	s_bSpeedMod -=1;
-	if (s_bSpeedMod < -4)
-	
+	s_bSpeedMod +=1;
+	if (s_bSpeedMod >4)
 	{
-		s_bSpeedMod = -4;
+		s_bSpeedMod = 4;
 	}
 }
 
