@@ -8,4 +8,7 @@
 #include "player.h"
 #include "gamestate.h"
 #include "maps/road.h"
+
+void driveHandleInput(BYTE *bDirX, BYTE *bDirY);
+
 #endif // _DRIVING_H_

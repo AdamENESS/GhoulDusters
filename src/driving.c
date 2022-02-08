@@ -31,6 +31,30 @@ static tCbFadeOut s_cbFadeOut = 0;
 static UBYTE s_isAnyPressed = 0;
 
 static BYTE s_bSpeedMod = 0;
+
+
+void driveHandleInput(BYTE *bDirX, BYTE *bDirY)
+{
+	if (keyCheck(KEY_D))
+	{
+		*bDirX += 1;
+	}
+	if (keyCheck(KEY_A))
+	{
+		*bDirX -= 1;
+	}
+
+	if (joyCheck(JOY1_RIGHT))
+	{
+		*bDirX += 1;
+	}
+	if (joyCheck(JOY1_LEFT))
+	{
+		*bDirX -= 1;
+	}
+}
+
+
 static void driveGsCreate(void)
 {
 	s_ubFadeoutCnt = 0;
@@ -117,6 +141,13 @@ bobNewBegin();
 			paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, 15 * s_ubFadeoutCnt / 20);
 		}
 	}
+
+	BYTE bDirX = 0, bDirY = 0;
+
+	handleInput(&bDirX, &bDirY);
+	g_pMainPlayer->_locMapY-=s_bSpeedMod;
+	g_pMainPlayer->_locMapX += (bDirX * 2);
+
 	bobNewPush(&g_pMainPlayer->_bobCarDrive);
 
 	vPortWaitForEnd(g_pVpMain);
@@ -133,16 +164,15 @@ bobNewBegin();
 	copProcessBlocks();
 	vPortWaitForEnd(g_pVpMain);
 
-	g_pMainPlayer->_locMapY-=s_bSpeedMod;
 	g_pMainPlayer->_bobCarDrive.sPos.uwX = g_pMainPlayer->_locMapX;
 	g_pMainPlayer->_bobCarDrive.sPos.uwY = g_pMainPlayer->_locMapY;
 
 	g_pMainBuffer->pCamera->uPos.uwY -=s_bSpeedMod;
 
 	s_bSpeedMod +=1;
-	if (s_bSpeedMod >4)
+	if (s_bSpeedMod >8)
 	{
-		s_bSpeedMod = 4;
+		s_bSpeedMod = 8;
 	}
 }
 
