@@ -67,6 +67,8 @@ file(
 	MAKE_DIRECTORY
 	${DATA_DIR} ${DATA_DIR}/sfx ${DATA_DIR}/intro ${DATA_DIR}/outro ${DATA_DIR}/sprites
 	${GEN_DIR}/game_bg ${GEN_DIR}/map ${GEN_DIR}/sprites/map   ${GEN_DIR}/sprites/ghosts  
+	${GEN_DIR}/sprites/cars  ${GEN_DIR}/sprites/busters    
+	
 )
 
 # Palette
@@ -261,11 +263,38 @@ ${GEN_DIR}/sprites/ghosts/${i}.png  ${offsX}   0 32 32
 list(APPEND GHOSTSPRITES "${i}.png")
 endforeach()
 
+
+set(DRIVECARS "")
+foreach(i RANGE 4)
+MATH(EXPR offsX "0 + ${i} * 32")
+MATH(EXPR i1 "2 * ${i}")
+MATH(EXPR i2 "2* ${i} +1")
+extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/spritesheet/ghosts-24x24.png
+DESTINATIONS
+${GEN_DIR}/sprites/cars/${i1}.png  ${offsX}   32 32 32
+)
+
+extractBitmaps(TARGET ${GHOST_EXECUTABLE} SOURCE ${RES_DIR}/spritesheet/ghosts-24x24.png
+DESTINATIONS
+${GEN_DIR}/sprites/cars/${i2}.png  ${offsX}   64 32 32
+)
+list(APPEND DRIVECARS "${i1}.png")
+list(APPEND DRIVECARS "${i2}.png")
+endforeach()
+
 convertTileset(
 		TARGET ${GHOST_EXECUTABLE} SIZE 32 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl 
 		SOURCE ${GEN_DIR}/sprites/ghosts DESTINATION ${GEN_DIR}/ghosts.png
 		TILES ${GHOSTSPRITES}
 	)
+
+
+	
+convertTileset(
+	TARGET ${GHOST_EXECUTABLE} SIZE 32 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl 
+	SOURCE ${GEN_DIR}/sprites/cars DESTINATION ${GEN_DIR}/cars.png
+	TILES ${DRIVECARS}
+)
 
 convertBitmaps(
 	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl MASK_COLOR ${TRANSPARENCY_HEX}
@@ -278,6 +307,16 @@ convertBitmaps(
 		${DATA_DIR}/sprites/ghosts_mask.bm
 )
 
+convertBitmaps(
+	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl MASK_COLOR ${TRANSPARENCY_HEX}
+	INTERLEAVED SOURCES
+		
+		${GEN_DIR}/cars.png
+	DESTINATIONS
+		${DATA_DIR}/sprites/cars.bm
+	MASKS
+		${DATA_DIR}/sprites/cars_mask.bm
+)
 
 convertBitmaps(
 	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/bitmaps/GB-Modern.gpl

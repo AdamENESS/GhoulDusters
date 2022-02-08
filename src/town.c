@@ -33,6 +33,7 @@ static tCbFadeOut s_cbFadeOut = 0;
 static UBYTE s_isAnyPressed = 0;
 static UBYTE s_isEntryFade = 1;
 #define GAME_BPP 5
+#define SPEED_MOD 2
 
 //static UWORD s_pPaletteRef[1 << GAME_BPP];
 static UWORD *s_pColorBg;
@@ -212,36 +213,36 @@ void handleInput(BYTE *bDirX, BYTE *bDirY)
 	}
 	if (keyCheck(KEY_D))
 	{
-		*bDirX += 1;
+		*bDirX += SPEED_MOD;
 	}
 	if (keyCheck(KEY_A))
 	{
-		*bDirX -= 1;
+		*bDirX -= SPEED_MOD;
 	}
 	if (keyCheck(KEY_S))
 	{
-		*bDirY += 1;
+		*bDirY += SPEED_MOD;
 	}
 	if (keyCheck(KEY_W))
 	{
-		*bDirY -= 1;
+		*bDirY -= SPEED_MOD;
 	}
 
 	if (joyCheck(JOY1_RIGHT))
 	{
-		*bDirX += 1;
+		*bDirX += SPEED_MOD;
 	}
 	if (joyCheck(JOY1_LEFT))
 	{
-		*bDirX -= 1;
+		*bDirX -= SPEED_MOD;
 	}
 	if (joyCheck(JOY1_DOWN))
 	{
-		*bDirY += 1;
+		*bDirY += SPEED_MOD;
 	}
 	if (joyCheck(JOY1_UP))
 	{
-		*bDirY -= 1;
+		*bDirY -= SPEED_MOD;
 	}
 }
 void fadeLoop(void)
@@ -315,6 +316,7 @@ static void townGsLoop(void)
 	else
 	{
 		bobNewPush(&g_pMainPlayer->_bobCarMap);
+		//bobNewPush(&g_pMainPlayer->_bobCarDrive);
 		bobNewPush(&g_pWanderers[0]->_Bob);
 		bobNewPush(&g_pWanderers[1]->_Bob);
 		for (int i = 0; i < 4; i++)
@@ -370,6 +372,8 @@ UBYTE townFadeOut(void)
 void townResume(void)
 {
 
+	vPortWaitForEnd(g_pVpMain);
+	viewUpdateCLUT(g_pView);
 	s_ubFadeoutCnt = 0;
 	s_eFadeState = FADE_STATE_IN;
 	UBYTE **pTiles = g_pMainBuffer->pTileData;

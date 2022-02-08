@@ -8,6 +8,8 @@ extern tBitMap *g_pSprites16x;
 extern tBitMap *g_pSpriteMask16x;
 extern tBitMap *g_pSprites32x; // Ghosts
 extern tBitMap *g_pSpriteMask32x;
+extern tBitMap *g_pCarSprites;
+extern tBitMap *g_pCarSpritesMask;
 
 
 extern tBitMap *g_pTiles;

@@ -8,6 +8,8 @@ tBitMap *g_pSprites32x;
 tBitMap *g_pSpriteMask32x;
 tBitMap *g_pTiles;
 tBitMap *g_pTilesMask;
+tBitMap *g_pCarSprites;
+tBitMap *g_pCarSpritesMask;
 tPtplayerMod *g_pMods[MOD_COUNT];
 UWORD *g_pModSamples;
 
@@ -18,16 +20,25 @@ void loadMapAssets(void)
 	g_pSpriteMask16x = bitmapCreateFromFile("data/sprites/mapsprites_masks.bm", 0);
 	g_pSprites32x = bitmapCreateFromFile("data/sprites/ghosts.bm", 0);
 	g_pSpriteMask32x = bitmapCreateFromFile("data/sprites/ghosts_mask.bm", 0);
+	g_pCarSprites = bitmapCreateFromFile("data/sprites/cars.bm", 0);
+	g_pCarSpritesMask = bitmapCreateFromFile("data/sprites/cars_mask.bm", 0);
+
 	g_pTiles = bitmapCreateFromFile("data/maps/citytiles.bm", 0);
 	g_pTilesMask = bitmapCreateFromFile("data/maps/citytilesMasked.bm", 0);
+	
 //	systemOwnBlitter();
 }
 
 void destroyMapAssets(void)
 {
-    bitmapDestroy(g_pTiles);
+    bitmapDestroy(g_pTilesMask);
+	bitmapDestroy(g_pTiles);
     bitmapDestroy(g_pSpriteMask16x);
     bitmapDestroy(g_pSprites16x);
+	bitmapDestroy(g_pCarSpritesMask);
+	bitmapDestroy(g_pCarSprites);
+	bitmapDestroy(g_pSpriteMask32x);
+	bitmapDestroy(g_pSprites32x);
 }
 
 void loadMusicAssets(void)

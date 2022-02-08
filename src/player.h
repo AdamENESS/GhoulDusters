@@ -8,6 +8,7 @@ typedef struct _tPlayer
 {
     UWORD _locX;
     UWORD _locY;
+    UWORD _locMapX, _locMapY;
     UBYTE _locModX, _locModY;
     UBYTE _carModel;
     UBYTE _equipment[15];

@@ -57,6 +57,10 @@ static void driveGsCreate(void)
 		}
 	}
 
+	g_pMainPlayer->_locMapX = 140;
+	g_pMainPlayer->_locMapY = 120;
+	
+
 //	g_pMainBuffer->pCamera->uPos.uwY -=2;
 	
 	tileBufferRedrawAll(g_pMainBuffer);
@@ -91,6 +95,8 @@ bobNewBegin();
 		{
 			s_cbWait();
 		}
+
+		
 	}
 	else if (s_eFadeState == FADE_STATE_OUT)
 	{
@@ -111,10 +117,12 @@ bobNewBegin();
 			paletteDim(s_pPaletteRef, g_pVpMain->pPalette, 32, 15 * s_ubFadeoutCnt / 20);
 		}
 	}
+	bobNewPush(&g_pMainPlayer->_bobCarDrive);
 
 	vPortWaitForEnd(g_pVpMain);
 	viewUpdateCLUT(g_pView);
 		// Finish bob drawing
+	
 	bobNewPushingDone();
 	bobNewEnd();
 
@@ -124,6 +132,10 @@ bobNewBegin();
 	viewProcessManagers(g_pView);
 	copProcessBlocks();
 	vPortWaitForEnd(g_pVpMain);
+
+	g_pMainPlayer->_locMapY-=s_bSpeedMod;
+	g_pMainPlayer->_bobCarDrive.sPos.uwX = g_pMainPlayer->_locMapX;
+	g_pMainPlayer->_bobCarDrive.sPos.uwY = g_pMainPlayer->_locMapY;
 
 	g_pMainBuffer->pCamera->uPos.uwY -=s_bSpeedMod;
 
@@ -136,6 +148,7 @@ bobNewBegin();
 
 static void driveGsDestroy(void)
 {
+	bobNewDiscardUndraw();
 	g_pMainBuffer->pCamera->uPos.uwY=0;
 }
 
@@ -148,6 +161,7 @@ void driveWait(void)
 	++s_ubFrame;
 	if (s_eFadeState == FADE_STATE_IDLE)
 	{
+
 		if (s_isAnyPressed)
 		{
 			s_ubFadeoutCnt = 20;
@@ -158,6 +172,8 @@ void driveWait(void)
 	// 	//ptplayerSfxPlay(s_pSfxLmc, -1, PTPLAYER_VOLUME_MAX, 1);
 	// 	// s_eFadeState = FADE_STATE_OUT; // FOR DEBUGGING SFX GLITCHES
 	// }
+
+
 }
 
 UBYTE driveFadeOut(void)
