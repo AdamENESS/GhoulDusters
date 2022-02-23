@@ -144,10 +144,17 @@ bobNewBegin();
 
 	BYTE bDirX = 0, bDirY = 0;
 
-	handleInput(&bDirX, &bDirY);
+	driveHandleInput(&bDirX, &bDirY);
 	g_pMainPlayer->_locMapY-=s_bSpeedMod;
+	
 	g_pMainPlayer->_locMapX += (bDirX * 2);
 
+	if (g_pMainPlayer->_locMapX < 20)
+		g_pMainPlayer->_locMapX = 20;
+	
+	if (g_pMainPlayer->_locMapX > 220)
+		g_pMainPlayer->_locMapX = 220;
+	
 	bobNewPush(&g_pMainPlayer->_bobCarDrive);
 
 	vPortWaitForEnd(g_pVpMain);
