@@ -9,6 +9,9 @@ tWanderer *g_pWanderers[2] = {NULL, NULL};
 tGhost *g_pGhosts[4] = {NULL, NULL, NULL, NULL};
 
 tGhost *g_pMarshGhosts[4] = {NULL, NULL, NULL, NULL};
+tGhost *g_pDriveGhost = NULL;
+tGhost *g_pCaptureGhost = NULL;
+
 tMarshMan *g_pMarshMellowMan = NULL;
 
 tView *g_pView = NULL;

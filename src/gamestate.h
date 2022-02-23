@@ -49,12 +49,19 @@ extern tPlayer *g_pMainPlayer ;
 extern tWanderer *g_pWanderers[2];
 extern tGhost *g_pGhosts[4];
 extern tGhost *g_pMarshGhosts[4];
+extern tGhost *g_pDriveGhost;
+extern tGhost *g_pCaptureGhost;
+
 extern tMarshMan *g_pMarshMellowMan;
 
 typedef struct _tGameStats
 {
     USHORT _cityPKEnergy;
     UBYTE* _buildings;
+    USHORT _money;
+    UBYTE _men;
+    UBYTE _traps;
+    ULONG _items; // bit flags for items.
 } tGameStats;
 
 extern tView *g_pView;
