@@ -22,7 +22,7 @@ else()
 	SET(GHOST_OUTPUT_EXECUTABLE ghost)
 	SET(PAK_EXECUTABLE convertAssets)
 	SET(PAK_OUTPUT_EXECUTABLE convertAssets)
-	
+
 	add_executable(${GHOST_EXECUTABLE} ${SOURCES})
 endif()
 
@@ -48,7 +48,7 @@ set(VERSION "${VER_MAJOR}.${VER_MINOR}.${VER_FIX}")
 
 target_compile_definitions(${GHOST_EXECUTABLE} PRIVATE GHOST_VERSION="${VERSION}")
 include_directories(${SDL2_INCLUDE_DIRS} include/)
-target_link_libraries(${GHOST_EXECUTABLE} ace )  
+target_link_libraries(${GHOST_EXECUTABLE} ace )
 target_compile_options(${GHOST_EXECUTABLE} PUBLIC -Wall)
 
 if(GAME_DEBUG)
@@ -66,9 +66,9 @@ set(TRANSPARENCY_HEX "#AAAAAA")
 file(
 	MAKE_DIRECTORY
 	${DATA_DIR} ${DATA_DIR}/sfx ${DATA_DIR}/intro ${DATA_DIR}/outro ${DATA_DIR}/sprites
-	${GEN_DIR}/game_bg ${GEN_DIR}/map ${GEN_DIR}/sprites/map   ${GEN_DIR}/sprites/ghosts  
-	${GEN_DIR}/sprites/cars  ${GEN_DIR}/sprites/busters    
-	
+	${GEN_DIR}/game_bg ${GEN_DIR}/maps ${GEN_DIR}/sprites/map   ${GEN_DIR}/sprites/ghosts
+	${GEN_DIR}/sprites/cars  ${GEN_DIR}/sprites/busters
+
 )
 
 # Palette
@@ -119,7 +119,7 @@ foreach(i RANGE 6)
 	${GEN_DIR}/sprites/map/${i}.png  ${offsX}   0 16 16
 	)
 	list(APPEND MAPSPRITES "${i}.png")
-	
+
 endforeach(i RANGE 6)
 
 
@@ -131,7 +131,7 @@ foreach(i RANGE 6)
 	${GEN_DIR}/sprites/map/${file}.png  ${offsX}   16 16 16
 	)
 	list(APPEND MAPSPRITES "${file}.png")
-	
+
 endforeach(i RANGE 6)
 
 foreach(i RANGE 6)
@@ -142,20 +142,20 @@ foreach(i RANGE 6)
 	${GEN_DIR}/sprites/map/${file}.png  ${offsX}   32 16 16
 	)
 	list(APPEND MAPSPRITES "${file}.png")
-	
+
 endforeach(i RANGE 6)
 
 
-# convertTileset(
-# 		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
-# 		SOURCE ${GEN_DIR}/sprites/map DESTINATION ${GEN_DIR}/mapsprites.png
-# 		TILES ${CITYTILES}
-# )
+convertTileset(
+		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
+		SOURCE ${GEN_DIR}/sprites/map DESTINATION ${GEN_DIR}/mapsprites.png
+		TILES ${CITYTILES}
+)
 
 convertBitmaps(
 	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl MASK_COLOR ${TRANSPARENCY_HEX}
-	INTERLEAVED SOURCES 
-		
+	INTERLEAVED SOURCES
+
 		${GEN_DIR}/mapsprites.png
 	DESTINATIONS
 		${DATA_DIR}/sprites/mapsprites.bm
@@ -212,7 +212,7 @@ ${GEN_DIR}/maps/${file}.png ${offsX} ${offsY} 16 16
 )
 list(APPEND CITYTILES "${file}.png")
 endforeach(i RANGE 12)
-	
+
 endforeach(y RANGE 11)
 
 # foreach(i RANGE 38)
@@ -236,7 +236,7 @@ endforeach(y RANGE 11)
 # endforeach()
 
 convertTileset(
-		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl 
+		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
 		SOURCE ${GEN_DIR}/maps DESTINATION ${GEN_DIR}/citytiles.png
 		TILES ${CITYTILES}
 	)
@@ -244,7 +244,7 @@ convertTileset(
 convertBitmaps(
 	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl MASK_COLOR ${TRANSPARENCY_HEX}
 	INTERLEAVED SOURCES
-		
+
 		${GEN_DIR}/citytiles.png
 	DESTINATIONS
 		${DATA_DIR}/maps/citytiles.bm
@@ -283,15 +283,15 @@ list(APPEND DRIVECARS "${i2}.png")
 endforeach()
 
 convertTileset(
-		TARGET ${GHOST_EXECUTABLE} SIZE 32 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl 
+		TARGET ${GHOST_EXECUTABLE} SIZE 32 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
 		SOURCE ${GEN_DIR}/sprites/ghosts DESTINATION ${GEN_DIR}/ghosts.png
 		TILES ${GHOSTSPRITES}
 	)
 
 
-	
+
 convertTileset(
-	TARGET ${GHOST_EXECUTABLE} SIZE 32 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl 
+	TARGET ${GHOST_EXECUTABLE} SIZE 32 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
 	SOURCE ${GEN_DIR}/sprites/cars DESTINATION ${GEN_DIR}/cars.png
 	TILES ${DRIVECARS}
 )
@@ -299,7 +299,7 @@ convertTileset(
 convertBitmaps(
 	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl MASK_COLOR ${TRANSPARENCY_HEX}
 	INTERLEAVED SOURCES
-		
+
 		${GEN_DIR}/ghosts.png
 	DESTINATIONS
 		${DATA_DIR}/sprites/ghosts.bm
@@ -310,7 +310,7 @@ convertBitmaps(
 convertBitmaps(
 	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl MASK_COLOR ${TRANSPARENCY_HEX}
 	INTERLEAVED SOURCES
-		
+
 		${GEN_DIR}/cars.png
 	DESTINATIONS
 		${DATA_DIR}/sprites/cars.bm
@@ -324,12 +324,12 @@ convertBitmaps(
 		${RES_DIR}/bitmaps/GB-Modern.png
 	DESTINATIONS
 		${DATA_DIR}/GB-Modern.bm
-		
+
 )
 
 # mergeMods(
 # 	TARGET ${GHOST_EXECUTABLE}
-# 	SOURCES ${RES_DIR}/music/ghostbusters_.mod 
+# 	SOURCES ${RES_DIR}/music/ghostbusters_.mod
 # 	DESTINATIONS ${DATA_DIR}/ghostbusters.mod
 
 # 	SAMPLE_PACK ${DATA_DIR}/samples.samplepack
