@@ -26,4 +26,3 @@ tools/*/*.plt
 showcase/NUL
 exe2adf.exe
 nul.d
-deps/ACE/
