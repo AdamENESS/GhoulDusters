@@ -146,11 +146,11 @@ foreach(i RANGE 6)
 endforeach(i RANGE 6)
 
 
-convertTileset(
-		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
-		SOURCE ${GEN_DIR}/sprites/map DESTINATION ${GEN_DIR}/mapsprites.png
-		TILES ${CITYTILES}
-)
+# convertTileset(
+# 		TARGET ${GHOST_EXECUTABLE} SIZE 16 PALETTE ${RES_DIR}/maps/Ghostbusters.gpl
+# 		SOURCE ${GEN_DIR}/sprites/map DESTINATION ${GEN_DIR}/mapsprites.png
+# 		TILES ${CITYTILES}
+# )
 
 convertBitmaps(
 	TARGET ${GHOST_EXECUTABLE} PALETTE ${RES_DIR}/maps/Ghostbusters.gpl MASK_COLOR ${TRANSPARENCY_HEX}
