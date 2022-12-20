@@ -30,11 +30,18 @@ UBYTE g_bBuildings[40] = {
 
 void ResetGameStats(void)
 {
+    // New Game, reset my stats.
     if (g_pGameStats == NULL)
     {
         g_pGameStats = memAllocFastClear(sizeof(tGameStats));
     }
 
     g_pGameStats->_buildings = g_bBuildings;
+    g_pGameStats->_cityPKEnergy = 0;
+    g_pGameStats->_men = 3;
+    g_pGameStats->_money = 10000;
+    g_pGameStats->_traps =0;
+    g_pGameStats->_carType = 0x00;
+    g_pGameStats->_items = 0x00;
     
 }

@@ -31,7 +31,7 @@ static UBYTE s_ubFadeoutCnt;
 static tCbLogo s_cbFadeIn = 0, s_cbWait = 0;
 static tCbFadeOut s_cbFadeOut = 0;
 static UBYTE s_isAnyPressed = 0;
-static UBYTE s_isEntryFade = 1;
+
 #define GAME_BPP 5
 #define SPEED_MOD 2
 
@@ -307,11 +307,24 @@ static void townGsLoop(void)
 		handleInput(&bDirX, &bDirY);
 		wandererProcess(g_pWanderers[0]);
 		wandererProcess(g_pWanderers[1]);
+		
 		for (int i = 0; i < 4; i++)
 		{
 			ghostProcess(g_pGhosts[i]);
 		}
+		
 		updatePlayer(g_pMainPlayer, bDirX, bDirY);
+
+		for (int i=0; i<4; i++)
+		{
+			// are ghost and car colliding?
+			if (ghostCollide(g_pGhosts[i], g_pMainPlayer))
+			{
+				
+			}
+			
+		}
+
 	}
 	else
 	{

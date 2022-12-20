@@ -56,6 +56,7 @@ extern tMarshMan *g_pMarshMellowMan;
 
 typedef struct _tGameStats
 {
+    UBYTE _carType;
     USHORT _cityPKEnergy;
     UBYTE* _buildings;
     USHORT _money;

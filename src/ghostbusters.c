@@ -11,7 +11,6 @@
 #include "ghostbusters.h"
 
 tStateManager *g_pStateMachineGame;
-static ULONG s_ulSampleSize;
 static UBYTE s_ubCurrentMod = 0;
 
 static void onSongEnd(void) {

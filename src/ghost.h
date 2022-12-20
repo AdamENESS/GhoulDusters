@@ -7,7 +7,7 @@
 #define GHOST_ZULL_X 170
 #define GHOST_ZULL_Y 90
 #define GHOST_ZULL_STEPS 100
-
+typedef struct _tPlayer tPlayer;
 typedef struct _tGhost
 {
     UBYTE _corner;
@@ -23,6 +23,7 @@ typedef struct _tGhost
     BYTE _currentZullStep;
     BYTE _respawnDelay;
     UBYTE _stepDelay;
+    UBYTE _active;
 } tGhost;
 
 
@@ -32,5 +33,5 @@ void ghostInitBobs(tGhost* pGhost);
 void destroyGhost(tGhost* pGhost);
 void ghostProcess(tGhost* pGhost);
 void ghostReset(tGhost* pGhost); // Make way to zuul for example.
-
+UBYTE ghostCollide(tGhost* pGhost, tPlayer* pPlayer);
 #endif // _GHOST_H_
